@@ -1,13 +1,13 @@
-﻿# Secrets & env
+﻿# Secrets
 .env
 *.key
 *.pem
 
 # Python
-__pycache__/
-*.pyc
 .venv/
 venv/
+__pycache__/
+*.pyc
 
 # Logs & caches
 logs/
@@ -15,17 +15,16 @@ logs/
 cache/
 .checkpoints/
 
-# Audio / video dumps
-*.wav
-*.mp3
-*.ogg
-*.mp4
-
-# Models & big assets — tracked via external download or (optionally) LFS
-models/
+# Big binaries we DON’T want in git
 LLM-BASE/
+models/
 vrm/
 voice/
 wakewords/
-weights/
 assets/raw/
+*.gguf
+*.onnx
+*.bin
+*.wav
+*.mp3
+*.mp4
