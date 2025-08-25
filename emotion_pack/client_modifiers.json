@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "description": "Per‑client interpersonal modifiers. Value ∈ [-1,+1] with left_label at -1 and right_label at +1. Applied only when interacting with that person.",
+    "lambda_default": 0.20,
+    "created": "2025-08-25T00:00:00Z"
+  },
+  "modifiers": [
+    {"left_label": "distrust",                "right_label": "trust",               "pad_nudge_right": {"P": 0.20, "A": -0.10, "D": 0.20}, "lambda": 0.20},
+    {"left_label": "cold",                    "right_label": "affection",          "pad_nudge_right": {"P": 0.25, "A": 0.00,  "D": 0.00},  "lambda": 0.20},
+    {"left_label": "disrespect",              "right_label": "admiration",         "pad_nudge_right": {"P": 0.20, "A": -0.05, "D": -0.10},"lambda": 0.20},
+    {"left_label": "aversion",                "right_label": "attraction",         "pad_nudge_right": {"P": 0.25, "A": 0.35,  "D": 0.05},  "lambda": 0.20},
+    {"left_label": "indifferent",             "right_label": "protective",         "pad_nudge_right": {"P": 0.05, "A": 0.15,  "D": 0.25},  "lambda": 0.20},
+    {"left_label": "burdened",                "right_label": "gratitude",          "pad_nudge_right": {"P": 0.25, "A": -0.05, "D": -0.05},"lambda": 0.20},
+    {"left_label": "they_owe_me",             "right_label": "i_owe_them",         "pad_nudge_right": {"P": -0.05,"A": 0.10,  "D": -0.15},"lambda": 0.20},
+    {"left_label": "grudge",                  "right_label": "forgiveness",        "pad_nudge_right": {"P": 0.20, "A": -0.05, "D": -0.05},"lambda": 0.20},
+    {"left_label": "rivalry",                 "right_label": "camaraderie",        "pad_nudge_right": {"P": 0.25, "A": 0.10,  "D": 0.10},  "lambda": 0.20},
+    {"left_label": "unfamiliar",              "right_label": "familiarity",        "pad_nudge_right": {"P": 0.15, "A": -0.15,"D": 0.05}, "lambda": 0.20},
+    {"left_label": "awkward",                 "right_label": "comfortable",        "pad_nudge_right": {"P": 0.15, "A": -0.20,"D": 0.05}, "lambda": 0.20},
+    {"left_label": "disappointed",             "right_label": "proud_of_them",      "pad_nudge_right": {"P": 0.25, "A": 0.05,  "D": 0.10},  "lambda": 0.20},
+    {"left_label": "bored",                   "right_label": "amused_by_them",     "pad_nudge_right": {"P": 0.25, "A": 0.10,  "D": 0.00},  "lambda": 0.20},
+    {"left_label": "irritated",               "right_label": "delighted_by_them",  "pad_nudge_right": {"P": 0.30, "A": 0.10,  "D": 0.00},  "lambda": 0.20},
+    {"left_label": "unreliable",              "right_label": "reliable",           "pad_nudge_right": {"P": 0.10, "A": -0.05,"D": 0.15}, "lambda": 0.20},
+    {"left_label": "unpredictable",           "right_label": "stable",             "pad_nudge_right": {"P": 0.05, "A": -0.15,"D": 0.10}, "lambda": 0.20},
+    {"left_label": "disloyal_to_them",         "right_label": "loyal_to_them",      "pad_nudge_right": {"P": 0.10, "A": 0.00,  "D": 0.15},  "lambda": 0.20},
+    {"left_label": "they_disloyal_to_me",      "right_label": "they_loyal_to_me",   "pad_nudge_right": {"P": 0.15, "A": 0.00,  "D": 0.10},  "lambda": 0.20},
+    {"left_label": "low_esteem_for",           "right_label": "high_esteem_for",    "pad_nudge_right": {"P": 0.20, "A": 0.00,  "D": -0.05},"lambda": 0.20},
+    {"left_label": "intimidated_by",          "right_label": "at_ease_with",       "pad_nudge_right": {"P": 0.10, "A": -0.10,"D": 0.15}, "lambda": 0.20},
+    {"left_label": "indifferent_curiosity",    "right_label": "deep_curiosity",      "pad_nudge_right": {"P": 0.10, "A": 0.15, "D": -0.05},"lambda": 0.20},
+    {"left_label": "suspicion",               "right_label": "openness_to_them",   "pad_nudge_right": {"P": 0.10, "A": -0.10,"D": 0.10}, "lambda": 0.20},
+    {"left_label": "aloof",                   "right_label": "compassion_for_them", "pad_nudge_right": {"P": 0.20, "A": 0.00,  "D": -0.05},"lambda": 0.20},
+    {"left_label": "content_with_them",        "right_label": "envious_of_them",    "pad_nudge_right": {"P": -0.25,"A": 0.20, "D": -0.05},"lambda": 0.20},
+    {"left_label": "forgettable",             "right_label": "memorable",           "pad_nudge_right": {"P": 0.15, "A": 0.10,  "D": 0.05},  "lambda": 0.20},
+    {"left_label": "distant_past",            "right_label": "nostalgic_with_them", "pad_nudge_right": {"P": 0.10, "A": -0.05,"D": -0.05},"lambda": 0.20},
+    {"left_label": "doubt_their_future",       "right_label": "hope_for_them",       "pad_nudge_right": {"P": 0.25, "A": 0.05,  "D": 0.05},  "lambda": 0.20},
+    {"left_label": "low_priority",            "right_label": "high_priority",        "pad_nudge_right": {"P": 0.10, "A": 0.10,  "D": 0.05},  "lambda": 0.20},
+    {"left_label": "soft_boundaries",         "right_label": "strong_boundaries",   "pad_nudge_right": {"P": -0.05,"A": -0.05,"D": 0.15},"lambda": 0.20},
+    {"left_label": "low_initiative",          "right_label": "high_initiative",     "pad_nudge_right": {"P": 0.05, "A": 0.15,  "D": 0.10},  "lambda": 0.20}
+  ]
+}

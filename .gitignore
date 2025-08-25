@@ -1,0 +1,31 @@
+﻿# Secrets & env
+.env
+*.key
+*.pem
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Logs & caches
+logs/
+*.log
+cache/
+.checkpoints/
+
+# Audio / video dumps
+*.wav
+*.mp3
+*.ogg
+*.mp4
+
+# Models & big assets — tracked via external download or (optionally) LFS
+models/
+LLM-BASE/
+vrm/
+voice/
+wakewords/
+weights/
+assets/raw/

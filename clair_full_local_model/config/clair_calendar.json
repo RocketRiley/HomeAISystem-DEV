@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1",
+    "date": "2025-08-27",
+    "start": "09:00",
+    "end": "09:30",
+    "title": "Task: TestTask",
+    "description": "Automatically scheduled task"
+  },
+  {
+    "id": "2",
+    "date": "2025-08-27",
+    "start": "12:00",
+    "end": "13:00",
+    "title": "Meeting with Team",
+    "description": ""
+  }
+]

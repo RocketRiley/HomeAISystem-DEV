@@ -1,0 +1,42 @@
+{
+  "vision": {
+    "tv_show_detected": {
+      "threshold": 0.8,
+      "action": "comment_on_show"
+    }
+  },
+  "audio": {
+    "wake_word_detected": {
+      "wake_words": ["hey clair", "okay clair", "hi clair"],
+      "action": "respond_to_user"
+    },
+    "name_called_repeatedly": {
+      "repeats": 3,
+      "action": "get_attention"
+    }
+  },
+  "twitch": {
+    "enabled": false
+  },
+  "time": {
+    "morning": {
+      "time": "09:00",
+      "action": "morning_greeting"
+    },
+    "stretch_reminder": {
+      "interval_minutes": 120,
+      "action": "remind_stretch"
+    }
+  },
+  "memory": {
+    "unfinished_task": {
+      "action": "bring_up_unfinished_task"
+    }
+  },
+  "attention": {
+    "idle_for_minutes": {
+      "minutes": 30,
+      "action": "check_in"
+    }
+  }
+}

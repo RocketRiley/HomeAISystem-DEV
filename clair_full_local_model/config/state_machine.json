@@ -1,0 +1,34 @@
+{
+  "states": {
+    "awake": {
+      "description": "Clair is awake and actively listening.",
+      "transitions": {
+        "go_to_sleep": "sleep",
+        "dnd_start": "dnd"
+      }
+    },
+    "sleep": {
+      "description": "Clair is sleeping and will remain silent except for priority events.",
+      "transitions": {
+        "wake_up": "awake"
+      }
+    },
+    "dnd": {
+      "description": "Do Not Disturb: Clair will remain silent until re‑enabled.",
+      "transitions": {
+        "dnd_end": "awake"
+      }
+    }
+  },
+  "priority_events": [
+    "emergency_alert",
+    "person_calling_repeatedly",
+    "fire_alarm",
+    "security_breach",
+    "important_calendar_event"
+  ],
+  "quiet_hours": {
+    "start": "22:00",
+    "end": "07:00"
+  }
+}

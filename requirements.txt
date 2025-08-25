@@ -1,0 +1,13 @@
+# Python dependencies for the Clair Local Model demo scripts
+#
+# These packages are sufficient to run the provided example scripts.
+# You may install additional libraries such as openWakeWord, faster-whisper
+# or Piper/XTTS for full STT/TTS integration; those are optional and
+# not included here because they may require platform‑specific builds.
+
+python-osc>=1.7.4
+websockets>=10.4
+python-dotenv>=0.21.0
+# Open‑source LLM support (requires a local .gguf model)
+llama-cpp-python>=0.2.0
+openai>=1.0.0  # required only for online mode; safe to omit if running offline

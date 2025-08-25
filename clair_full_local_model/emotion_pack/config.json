@@ -1,0 +1,22 @@
+{
+  "weights": {"w0": 0.25, "w1": 0.40, "w2": 0.15, "w3": 0.15, "w4": 0.05},
+  "beta_baseline": 0.01,
+  "mutual_inhibition": 0.5,
+  "emotion_mass_cap": 2.0,
+  "tts_mapping": {
+    "kA": 0.25,
+    "kP": 0.20,
+    "kE": 0.30,
+    "kS": 0.20,
+    "rate_base": 1.0,
+    "pitch_base": 0.0,
+    "energy_base": 0.5,
+    "pause_base": 0.15
+  },
+  "mode_offsets": {
+    "home":     {"P": 0.05, "A": -0.05, "D": 0.00},
+    "stream":   {"P": 0.05, "A": 0.10, "D": 0.05},
+    "intox":    {"P": 0.10, "A": 0.20, "D": -0.05},
+    "quiet":    {"P": 0.05, "A": -0.20, "D": -0.05}
+  }
+}
