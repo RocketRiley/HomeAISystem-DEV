@@ -25,15 +25,17 @@ from __future__ import annotations
 import os
 import threading
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List, Dict
 
 import tkinter as tk
-from tkinter import scrolledtext, messagebox, filedialog
+from tkinter import scrolledtext
 
 try:
     from dotenv import load_dotenv
 except ImportError:
-    load_dotenv = lambda *_, **__: None  # type: ignore
+    def load_dotenv(*_, **__):  # type: ignore
+        """Fallback if python-dotenv is not installed."""
+        return None
 
 try:
     from PIL import Image, ImageTk  # type: ignore
@@ -101,10 +103,17 @@ class ClairChatApp:
         # Log manager for saving conversation history
         try:
             from .log_manager import LogManager  # type: ignore
+            from .memory_manager import MemoryManager  # type: ignore
         except Exception:
             from log_manager import LogManager  # type: ignore
+            from memory_manager import MemoryManager  # type: ignore
         log_path = Path(__file__).resolve().parent.parent / "config" / "logs.jsonl"
         self.logger = LogManager(log_path)
+        user_id = os.getenv("USER_ID", "default")
+        self.memory = MemoryManager(user_id)
+        # Conversation history for prompt construction
+        self.history: List[Dict[str, str]] = []
+        self.human_mode = os.getenv("HIDE_AI_IDENTITY", "false").lower() in {"true", "1", "yes"}
         # Greet the user
         self._print("Clair", "Hello! I'm ready to chat.")
 
@@ -132,23 +141,37 @@ class ClairChatApp:
             return
         self.entry_var.set("")
         self._print("You", user_input)
+        try:
+            self.memory.add_event(user_input, participants=["user"], tags=["conversation"])
+        except Exception:
+            pass
         # Respond asynchronously
         threading.Thread(target=self._generate_and_display, args=(user_input,), daemon=True).start()
 
     def _generate_and_display(self, user_input: str) -> None:
-        reply = llm_adapter.generate_response(user_input)
+        reply = llm_adapter.generate_response(
+            user_input,
+            history=self.history,
+            human_mode=self.human_mode,
+        )
+        self.history.append({"role": "user", "content": user_input})
         if reply is None:
-            # Fallback if no model available
             reply = "I'm sorry, I'm currently unable to generate a response."
         else:
-            # Apply content filter using FilterPipeline.filter_text
             reply = self.filter.filter_text(reply)
+            self.history.append({"role": "assistant", "content": reply})
+        if len(self.history) > 20:
+            self.history = self.history[-20:]
         self._print("Clair", reply)
+        try:
+            self.memory.add_event(reply, participants=["clair"], tags=["conversation"])
+        except Exception:
+            pass
 
 
 def main() -> None:
     root = tk.Tk()
-    app = ClairChatApp(root)
+    ClairChatApp(root)
     root.mainloop()
 
 

@@ -74,6 +74,8 @@ class LauncherUI(tk.Tk):
         self.resizable(False, False)
         # Load existing config values
         self.config_vals = dotenv_values(str(CONFIG_FILE))
+        # Show one-time EULA/TOS confirmation unless in dev mode
+        self._check_eula()
         # Build UI
         self._build_ui()
 
@@ -93,15 +95,20 @@ class LauncherUI(tk.Tk):
         hide_ai_cb = ttk.Checkbutton(self, text="Hide AI identity", variable=self.hide_ai_var)
         hide_ai_cb.grid(row=2, column=0, sticky="w", **padding)
 
+        # Dev mode checkbox
+        self.dev_mode_var = tk.BooleanVar(value=self.config_vals.get("DEV_MODE", "true").lower() in ("true", "1", "yes"))
+        dev_cb = ttk.Checkbutton(self, text="Enable Dev Mode", variable=self.dev_mode_var)
+        dev_cb.grid(row=3, column=0, sticky="w", **padding)
+
         # Filter level dropdown
         filter_levels = ["twitch", "pg13", "enabled", "adult", "dev0"]
         current_filter = self.config_vals.get("FILTER_LEVEL", "enabled").lower()
         if current_filter not in filter_levels:
             current_filter = "enabled"
         self.filter_var = tk.StringVar(value=current_filter)
-        ttk.Label(self, text="Content filter level:").grid(row=3, column=0, sticky="w", **padding)
+        ttk.Label(self, text="Content filter level:").grid(row=4, column=0, sticky="w", **padding)
         filter_menu = ttk.OptionMenu(self, self.filter_var, current_filter, *filter_levels)
-        filter_menu.grid(row=3, column=1, sticky="w", **padding)
+        filter_menu.grid(row=4, column=1, sticky="w", **padding)
 
         # GPU layer (device) dropdown: choose how many layers to offload to GPU (0 = CPU only).
         # Provide human‑readable names with associated layer counts.
@@ -115,9 +122,9 @@ class LauncherUI(tk.Tk):
         # Map stored value back to display name; default to CPU if unknown
         display_gpu = next((name for name, val in gpu_options.items() if val == current_gpu), "CPU (0)")
         self.gpu_var = tk.StringVar(value=display_gpu)
-        ttk.Label(self, text="Device mode:").grid(row=4, column=0, sticky="w", **padding)
+        ttk.Label(self, text="Device mode:").grid(row=5, column=0, sticky="w", **padding)
         gpu_menu = ttk.OptionMenu(self, self.gpu_var, display_gpu, *gpu_options.keys())
-        gpu_menu.grid(row=4, column=1, sticky="w", **padding)
+        gpu_menu.grid(row=5, column=1, sticky="w", **padding)
 
         # Model selection dropdown: list available GGUF files in LLM-BASE directory
         model_dir = Path(__file__).resolve().parent.parent / "LLM-BASE"
@@ -134,27 +141,44 @@ class LauncherUI(tk.Tk):
         self.model_map = {Path(m).name: m for m in model_files}
         current_display = Path(current_model).name if current_model else (model_display[0] if model_display else "")
         self.model_var = tk.StringVar(value=current_display)
-        ttk.Label(self, text="Model file:").grid(row=5, column=0, sticky="w", **padding)
+        ttk.Label(self, text="Model file:").grid(row=6, column=0, sticky="w", **padding)
         model_menu = ttk.OptionMenu(self, self.model_var, current_display, *model_display)
-        model_menu.grid(row=5, column=1, sticky="w", **padding)
+        model_menu.grid(row=6, column=1, sticky="w", **padding)
 
         # API key entry (masked)
-        ttk.Label(self, text="OpenAI API Key:").grid(row=6, column=0, sticky="w", **padding)
+        ttk.Label(self, text="OpenAI API Key:").grid(row=7, column=0, sticky="w", **padding)
         self.api_key_entry = ttk.Entry(self, show="*", width=30)
         self.api_key_entry.insert(0, self.config_vals.get("OPENAI_API_KEY", ""))
-        self.api_key_entry.grid(row=6, column=1, sticky="w", **padding)
+        self.api_key_entry.grid(row=7, column=1, sticky="w", **padding)
 
         # Buttons: Save, Start Voice Loop, Open Chat, Play Music, Quit
         save_btn = ttk.Button(self, text="Save Settings", command=self.save_settings)
-        save_btn.grid(row=7, column=0, **padding)
+        save_btn.grid(row=8, column=0, **padding)
         start_btn = ttk.Button(self, text="Start Voice Loop", command=self.start_chat)
-        start_btn.grid(row=7, column=1, **padding)
+        start_btn.grid(row=8, column=1, **padding)
         chat_btn = ttk.Button(self, text="Open Chat", command=self.start_chat_gui)
-        chat_btn.grid(row=8, column=0, **padding)
+        chat_btn.grid(row=9, column=0, **padding)
         music_btn = ttk.Button(self, text="Play Music", command=self.play_music_dialog)
-        music_btn.grid(row=8, column=1, **padding)
+        music_btn.grid(row=9, column=1, **padding)
         quit_btn = ttk.Button(self, text="Quit", command=self.quit)
-        quit_btn.grid(row=9, column=0, columnspan=2, **padding)
+        quit_btn.grid(row=10, column=0, columnspan=2, **padding)
+
+    def _check_eula(self) -> None:
+        """Display EULA/TOS confirmation once, unless in dev mode."""
+        if self.config_vals.get("DEV_MODE", "true").lower() in {"true", "1", "yes"}:
+            return
+        if self.config_vals.get("EULA_ACCEPTED", "false").lower() in {"true", "1", "yes"}:
+            return
+        eula_text = (
+            "THIS PROJECT IS UNDER PERMANENT DEVELOPMENT. If your AI misbehaves, shut it down.\n\n"
+            "By proceeding you accept the Aegis AI disclaimer and agree to take responsibility for your unit."
+        )
+        accepted = messagebox.askyesno("Aegis AI Disclaimer", eula_text)
+        if accepted:
+            set_key(str(CONFIG_FILE), "EULA_ACCEPTED", "true")
+            self.config_vals["EULA_ACCEPTED"] = "true"
+        else:
+            self.destroy()
 
     def save_settings(self) -> None:
         """Persist the current UI settings to the `.env` file."""
@@ -165,6 +189,7 @@ class LauncherUI(tk.Tk):
         set_key(str(CONFIG_FILE), "FILTER_LEVEL", self.filter_var.get())
         # Hide AI identity toggle
         set_key(str(CONFIG_FILE), "HIDE_AI_IDENTITY", "true" if self.hide_ai_var.get() else "false")
+        set_key(str(CONFIG_FILE), "DEV_MODE", "true" if self.dev_mode_var.get() else "false")
         # Map device display back to numeric GPU layers
         gpu_display = self.gpu_var.get()
         gpu_layers_map = {
@@ -191,23 +216,31 @@ class LauncherUI(tk.Tk):
         # Save settings before launching
         self.save_settings()
         def run_chat() -> None:
-            script_dir = Path(__file__).resolve().parent
-            speech_script = script_dir / "speech_loop_stub.py"
-            bridge_script = script_dir / "osc_bridge_stub.py"
+            speech_module = "scripts.speech_loop_stub"
+            # Launch VSeeFace with the configured model if available
+            vseeface_path = os.getenv("VSEEFACE_PATH")
+            model_path = os.getenv("VSEEFACE_MODEL") or str(
+                Path(__file__).resolve().parent.parent / "assets" / "3d models" / "ClairAI.vrm"
+            )
+            vseeface_proc = None
+            if vseeface_path and Path(vseeface_path).exists():
+                if Path(model_path).exists():
+                    try:
+                        vseeface_proc = subprocess.Popen([vseeface_path, "--load", model_path])
+                    except Exception:
+                        vseeface_proc = None
+                else:
+                    messagebox.showwarning("VSeeFace", f"VRM model not found at {model_path}")
+            elif vseeface_path:
+                messagebox.showwarning("VSeeFace", f"VSeeFace executable not found at {vseeface_path}")
             try:
-                # Start the OSC bridge in a background process.  It will send PAD values to VSeeFace.
-                bridge_proc = subprocess.Popen([sys.executable, str(bridge_script)])
-            except Exception:
-                bridge_proc = None
-            try:
-                subprocess.run([sys.executable, str(speech_script)])
+                subprocess.run([sys.executable, "-m", speech_module])
             except Exception as exc:
                 messagebox.showerror("Error", f"Failed to start chat: {exc}")
             finally:
-                # Terminate bridge process when chat exits
-                if bridge_proc:
+                if vseeface_proc:
                     try:
-                        bridge_proc.terminate()
+                        vseeface_proc.terminate()
                     except Exception:
                         pass
         # Launch in a new thread to avoid blocking the UI
