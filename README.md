@@ -1,7 +1,7 @@
 # HomeAISystem-DEV
 
 Local-first VTuber companion (Clair) with:
-- Local LLM (llama-cpp via `llama-cpp-python`)
+- Local LLM (llama.cpp via `llama-cpp-python`)
 - GUI launcher + chat window
 - TTS/STT hooks
 - VSeeFace (OSC) bridge for expressions, idle motion, lip-sync
