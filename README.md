@@ -36,7 +36,7 @@ Local-first VTuber companion (Clair) with:
    into `Assets/RoomModels/`, and open `Assets/Scenes/Main.unity`.
 9. Start the Python side: `python -m scripts.voice_loop_stub` (optional
    settings server: `python -m scripts.settings_server`).
-10. Press **Play** in Unity – Clair faces the camera, roams if enabled, and
+10. Press **Play** in Unity; Clair faces the camera, roams if enabled, and
     responds using STT/TTS out of the box.
 
 See `docs/EXTERNAL_DEPENDENCIES.txt` for optional audio/vision setup
