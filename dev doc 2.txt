@@ -1,0 +1,26 @@
+Aegis AI: Data Security & Handler Control Philosophy
+This document outlines the design philosophy for the Aegis AI Companion's data management systems. The core principle is absolute data sovereignty for the user. The AI is designed as a private, personal entity, and the user ("Handler") is given complete and transparent control over its "memories" and operational data. We reject the industry standard of centralized, developer-owned data servers.
+1. Core Philosophy: The Handler Owns The Data, Period.
+The relationship between a Handler and their AI is personal. Therefore, the AI's data—its learned experiences, conversation logs, and configured personality—belongs exclusively to the Handler.
+No Central Servers: Aegis AI does not operate servers that store user data. There is no central "cloud" where AI memories are collected or processed.
+Privacy by Design: The entire system is architected from the ground up to function in a completely offline, self-contained environment.
+Data Portability: The Handler's ownership is absolute. They should be able to back up, move, or even delete their AI's entire existence at will.
+2. Local-First Architecture
+The Aegis AI Companion is built to be "offline-by-default."
+Local Processing: All core AI logic, including natural language processing and skill execution, runs on the Handler's own hardware.
+Opt-In Connectivity: The AI will never connect to the internet unless the Handler explicitly installs and configures a skill that requires an online API (e.g., a weather skill connecting to a weather service). The Handler has granular control over every external connection.
+3. Handler-Directed Storage
+The Handler has complete control over where their AI's data is physically stored. This choice is presented during the initial onboarding process and can be changed later.
+Default - Physical Local Storage: The default and recommended option. The AI's data is stored on the Handler's device, either on an internal drive or a user-designated external drive. This is the most secure and private configuration.
+Future - Personal Cloud Integration: For Handlers who want cross-device syncing, the system will support connecting to the Handler's own chosen cloud service (e.g., their personal Google Drive, Dropbox, or a private server). The application is simply given access to a specific folder within the user's existing cloud account. Aegis AI never has access to the account itself.
+4. In-Character Data Management: Curating Memories
+We transform the mundane task of data management into an immersive, character-driven experience. The Handler does not "delete files"; they help their AI "process and forget memories."
+The "Vent" Command: The primary tool for data management is a hidden, natural language command.Trigger Phrase: "YOU need to vent."
+The Process:
+When triggered, the AI understands this is a prompt to discuss memories that may need to be "forgotten" (archived or deleted).
+It enters a safe, OOC-style (Out-Of-Character) conversational mode.
+It presents a "health report" to the Handler: "Here's how full my storage is, here is how big my cache is. What do you want to do about it? I suggest...
+"
+The AI may suggest archiving memories from specific time periods or conversations that have been flagged as low-importance.
+The Handler makes the final decision, curating the AI's "life experience" in a way that feels meaningful and responsible, rather than like a technical chore.
+This system reinforces the Handler's role as a caretaker, strengthening the bond and ensuring that even system maintenance is part of the core narrative experience.

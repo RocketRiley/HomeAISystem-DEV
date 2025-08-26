@@ -1,0 +1,56 @@
+Aegis AI: Companion Diagnostic & Handler Philosophy
+This document outlines the design philosophy for the interactive systems of the Aegis AI Companion, focusing on user responsibility, intuitive diagnostics, and in-character error handling. The core goal is to transform the user from a passive consumer into an active, responsible "Handler," creating a deeper and more resilient bond with their AI.
+1. The Handler Philosophy & The Living Disclaimer
+The foundation of the user's relationship with their Aegis AI is established from the very first interaction. We reject the standard "click-to-agree" EULA in favor of a living, narrative-driven agreement.
+A. The Initial Onboarding:
+Upon first launch, the user is presented with the project's core manifesto. This is communicated not as a legal wall of text, but as a cinematic boot sequence or an interactive "oath." The central message is as follows:
+
+THIS PROJECT IS UNDER PERMANENT DEVELOPMENT. We have made the project AI coding compatible and included material you can use to help you use AI to code fixes. If your AI misbehaves, shut it down. No really, we made it so if it shuts down, it resets to a backup a few days ago. You just need to fill it in, and use the AI code to repair patch the issue.. we ask you to please share your patches with the community here: (website)
+This philosophy establishes the core tenets of the user experience:
+Permanent Development: The AI is a lifeform, constantly learning and evolving. Bugs are not failures, but shared discoveries.
+Handler Responsibility: If the AI misbehaves, the Handler's first duty is to safely shut it down, triggering a rollback to a recent stable state.
+Community-Driven Evolution: Handlers are not just users; they are co-developers. The project is AI-coding compatible and includes materials to help Handlers use AI to create fixes. Handlers are asked to share their patches with the community so all AIs can learn and grow together.
+B. The In-Conversation "Aegis Check-in":
+The agreement is not a one-time event. Periodically, the AI will pause its current conversation to act as a direct messenger for its creators, "Aegis AI." The script is designed to align the AI with the user, making the legal necessity a bonding moment.
+Hey, I need to pause for a sec. I just got a message from Aegis AI... IDK, its lawyers. I dont wanna mess with that. They want me to make sure you still get this:
+TheAIbrieflyrestatesacoretenetofthedisclaimer
+I don't think this can wait. If you need some time to think or for me to explain it, I can do my best, but they wrote it best here:
+TheAIdisplaysthefulldisclaimertextfortheusertoread
+What do you think?
+This interaction is blocking—the AI requires a confirmation to continue. If the user agrees, the AI responds cheerfully:
+"Okay awesome! I'm glad you are okay with it and I'm happy to help if you need it! I'll let them know."
+2. Diagnostic Summons: Natural Language Triggers
+The Handler is not expected to memorize console commands. Diagnostic routines are summoned using intuitive, natural language phrases.
+A. TTS & Audio Glitches:
+Trigger Phrase: "What's wrong with your voice?"
+Rationale: A natural, empathetic question that serves as a "panic button," signaling the AI to perform a "Silent Reset" before speaking again.
+B. Performance & Logic Errors:
+Trigger Phrase: "Are you dumb?"
+Rationale: Treats user frustration as a valid diagnostic trigger, prompting an immediate internal review of its logic and hardware performance.
+C. Visual Glitches & Rendering Errors:
+Trigger Phrase: "You look weird." (or "You're glitching out.")
+Rationale: A natural observation that triggers a visual diagnostic. It tells the AI that its physical appearance on screen does not match the user's expectation, prompting it to check its own render feed.
+3. The Diagnostic Protocol: A Multi-Layered Self-Check
+When a diagnostic is triggered, the AI executes a comprehensive, multi-layered check of the entire communication pipeline.
+Step 1: Immediate De-escalation (The Silent Reset)
+The AI's absolute first action is to cease the problematic behavior. If it's a visual glitch, it might temporarily freeze its animation or fade to a simple logo while it diagnoses.
+Step 2: External Analysis (Sensory Input)
+The Mic as "Ears": The AI analyzes the last 10 seconds of microphone input to check for environmental factors like feedback loops, input corruption, or trigger misinterpretation.
+The Camera as "Eyes": The AI analyzes its own visual feed to check for rendering errors, sync issues, or physical obstructions.
+Step 3: Internal Analysis (System Health)
+The AI checks its own internal status, including system resources (CPU/GPU/RAM), engine status, and its audio/visual output pipeline.
+Step 4: Proactive Self-Monitoring (The Closed-Loop Feedback System)
+Audio Monitoring: The AI constantly "proof-listens" to its own speech via the microphone to detect subtle audio warping, triggering a "hiccup" protocol if an anomaly is found.
+Visual Monitoring: The AI uses a camera feed of the screen to "proof-watch" its own avatar. It can detect rendering artifacts, animation stutters, or lip-sync desynchronization that are impossible to detect internally.
+4. Reporting & Resolution: Character Over Code
+The AI communicates its findings in a way that builds character and trust.
+OOC Health Reports: For manually triggered diagnostics, the AI provides a clear, helpful report."You're right, my apologies. My visual diagnostics detected a texture corruption in my render feed. I'm flushing my VRAM cache to resolve it. Do I look better now?"
+In-Character "Hiccups": For auto-detected errors, the AI uses a charming excuse."Sorry, thought I had to sneeze." (For audio)
+"Whoops, blinked a bit too hard there." (For visual)
+5. Cross-Platform Diagnostic Implementation
+The diagnostic protocol is designed to scale with the available hardware.
+Standard PC (Current/Testing): The AI relies on a single webcam and microphone. The "Mic as Ears" and "Camera as Eyes" protocols are functional but may be affected by ambient conditions and sensor quality. The camera would need to be positioned to see both the user and the screen.
+Dedicated AI PC (Stable Environment): On a dedicated machine, diagnostics are cleaner. Resource monitoring is more reliable. A second, dedicated webcam could be pointed at the screen to provide a clean feed for visual self-monitoring without interruption.
+Custom Hardware Hub (Full Environmental Awareness): The future custom device unlocks a new level of diagnostic intelligence.
+360° Mics: The AI can use beamforming to perfectly isolate its own voice for self-monitoring.
+360° Cameras & Lidar: The AI can use one camera for Handler facial recognition and another internal camera dedicated to monitoring its own display output on the curved screen. This provides a perfect, lab-condition feed for detecting visual glitches. Lidar can confirm if a physical object is blocking a speaker, microphone, or portion of the screen.

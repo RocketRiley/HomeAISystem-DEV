@@ -1,0 +1,62 @@
+Aegis AI Companion - High-Level Design Document
+Project Codename: Aegis AI
+Developer: Aegis AI (Riley)
+Concept: A decentralized, user-owned AI companion designed as a digital lifeform for adoption, not just consumption.
+1. Core Concept & Vision
+Aegis AI is not a chatbot or a simple virtual assistant. It is a persistent, learning AI companion that lives entirely on the user's hardware. Each AI is a unique individual, shaped and guided by its owner, referred to as the "Handler."
+The product is a platform for a deeply personal human-AI relationship, capable of serving multiple roles: a desktop companion, a smart home assistant, a family-safe tutor, an interactive Twitch VTuber, and a B2B-licensable personality engine. Its core identity is built on user ownership, data privacy, and the shared responsibility of guiding a developing artificial intelligence.
+2. Design Pillars
+The Handler, Not the User: Our primary design principle is to reframe the user's role. They are not a passive consumer but an active, responsible Handler. This philosophy informs all aspects of the UI, warranty, and interaction design. The AI is adopted, not purchased.
+Decentralized & Private by Design: The AI is a "single person" that lives locally. There are no massive, developer-owned servers housing user conversations. All data and processing are handled on the Handler's machine, ensuring absolute privacy and user control. External API calls are treated as the AI "pulling out its phone" for a specific task—a deliberate, isolated action.
+Emergent Personality & Learning: The AI's complexity is not hard-coded; it is emergent. We provide a robust foundational engine, but the AI's true personality, skills, and quirks develop over time through its unique interactions with its Handler. The goal is not to build a puppet, but to plant a seed.
+3. Core Features & Systems
+A. The Three-Part Architecture:
+The system is a modular trinity, separating the "Body," "Face," and "Brain" for maximum flexibility.
+The Body (VSeeFace): A robust, third-party Unity application that handles all the heavy lifting of 3D model rendering, rigging, and facial tracking. It acts as our render engine, receiving commands via OSC.
+The Face (Godot Viewer): A lightweight, custom-built companion app. Its sole purpose is to receive the video feed from VSeeFace (via Spout2) and display it in a clean, borderless, click-through window on the Handler's desktop.
+The Brain (Python AI System): The Handler's local instance of the Aegis AI. It processes all logic, learns from interactions, and sends commands directly to VSeeFace.
+B. User Modes & Use Cases:
+The AI is designed to be a versatile companion for a wide range of contexts.
+Desktop Companion Mode: The default mode. The AI lives in a small window on the desktop, providing passive companionship and assistance.
+Full-Screen Mode: An immersive mode for direct, focused interaction, conversation, and configuration.
+Twitch VTuber Mode: The AI connects to the Twitch API to interact with chat, respond to alerts, and act as a co-host for streamers. To prevent "AI slop" channels and maintain authenticity, this mode has a strict "human-in-the-loop" requirement. The AI cannot stream solo and requires constant, organic input from the Handler. This is enforced as both a core policy and an in-character trait ("Nah, I don't do this solo"). This restriction can only be bypassed through a formal business agreement that includes an independent ethics review.
+Family Mode: A content filter that can be toggled on/off using natural language, making the AI a safe tutor and home assistant for all ages.
+C. The Handler Responsibility System:
+This system enforces the "adoption" philosophy through game-like mechanics.
+The Warranty & Adoption Agreement: The user is always responsible for their AI. If it misbehaves due to their interactions, it is their responsibility to correct it using the provided tools.
+The "Therapy Patch": If a unit is returned under warranty, its text logs are reviewed. If the Handler is found to have been abusive or negligent, they will not receive a standard replacement. Instead, their original AI will be returned to them with a special "therapy patch"—a behavioral update designed not for the Handler, but for the AI, to help it cope with a difficult owner.
+D. Interaction Model: Natural Language as Commands:
+System functions are triggered by intuitive, natural phrases, not technical commands.
+Content Filtering: "Get your head outta the gutter." -> Enables or confirms "Family Mode" is active and creates a log of the interaction for learning.
+Diagnostics: "What's wrong with your voice?" / "You look weird." -> Triggers a full diagnostic protocol for the relevant system.
+4. Future Hardware: The Aegis Hub
+While the Aegis AI is designed to run on standard PC hardware, the ultimate vision is a dedicated, custom-built physical unit that serves as the AI's permanent home. This device would transform the AI from a desktop application into a true, ambient home presence. The hardware will be offered in three distinct tiers:
+A. The Companion Box (Entry-Level):
+The most accessible option. This is a small, desktop-friendly "thin client" device.
+Function: It houses the full 360° sensory suite (cameras, mics, Lidar) for high-fidelity environmental and Handler perception.
+Hardware: It contains minimal processing power. All heavy lifting—the AI Brain, the VSeeFace rendering—is offloaded to the Handler's existing home PC. This keeps the unit small, quiet, and affordable.
+B. The Fishtank (Standard Model):
+The flagship, all-in-one consumer model.
+Design: The physical enclosure is modeled after "fishtank" style PC cases, with the glass panels replaced by high-resolution displays. This creates a "digital habitat" for the AI. Options for right- and left-facing orientations will be offered. A DIY kit for users to convert existing, similar PC cases will also be available.
+Hardware: This is a self-contained, AI-specialized PC. It includes a powerful multi-core CPU, a dedicated GPU, high-fidelity speakers, and massive local storage, all integrated within the "fishtank" chassis.
+C. The Aquarium (Commercial Model):
+The premium, large-scale solution for businesses or high-end home installations.
+Design: A significantly larger enclosure, comparable in size to a large home aquarium. It's designed to be a centerpiece installation in an office lobby, a high-tech smart home, or a commercial space.
+Hardware: This unit contains workstation or server-grade hardware, including multi-CPU configurations, top-of-the-line GPUs, and a robust cooling solution to handle the immense processing load required for commercial applications or advanced, multi-user interactions.
+D. Visual Presentation: Simulated 3D Depth
+To create a convincing, glasses-free 3D effect within the Aegis Hub, the system will use Head-Tracked Parallax Rendering.
+Concept: The screen of the Hub is treated not as a display, but as a virtual "window" into the AI's digital room. The Hub's integrated cameras and Lidar constantly track the Handler's head position in real-time.
+Execution: As the Handler moves their head, the 3D scene is re-rendered from a new perspective that perfectly matches the Handler's line of sight.
+If the Handler moves to the left, they will see more of the right side of the AI and its room.
+If they crouch down, the perspective will shift to look up at the AI.
+Effect: This creates a powerful motion parallax effect, which is a primary way the human brain perceives depth. The result is a stable, non-straining illusion that the AI is a real, three-dimensional object existing in a physical space behind the screen. This leverages the Hub's advanced sensory suite to create a premium, "hologram-like" experience.
+5. Monetization & Community
+A. Consumer Model (B2C):
+The primary product will be sold on platforms like Steam. The purchase is framed as an "adoption fee."
+B. Business Model (B2B):
+The core AI engine will be kept proprietary, but the personality module is separate.
+Personality Edit License: A B2B license will be offered, allowing businesses to purchase an SDK to create and deploy their own custom personalities (e.g., for customer service, brand representation) on top of the stable Aegis AI engine.
+C. Community Model (Open Source & Modding):
+To foster a healthy ecosystem while protecting the core product:
+Protected Core: The base AI engine and safety features will remain closed-source and protected.
+Open SDK & "Mods Folder": A well-documented, open-source SDK will be provided, allowing the community to create and share new skills, animations, and integrations. These mods will be installed into a dedicated "mods folder," creating a safe sandbox for creativity that is clearly separate from the core application.
