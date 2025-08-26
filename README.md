@@ -9,6 +9,7 @@ Local-first VTuber companion (Clair) with:
 - Logging & diagnostics
 - Tiered memory system with long-term persistence
 
+# codex/resolve-conflict-in-readme.md-aiaq9m
 ## Quick Start (10 steps)
 
 1. Clone repo.
@@ -20,6 +21,17 @@ Local-first VTuber companion (Clair) with:
    ```
 
    On Linux or Mac:
+=======
+## Quick Start
+
+1. Clone repo
+2. `python -m venv .venv && .\.venv\Scripts\Activate.ps1`
+3. `pip install -r requirements.txt`
+4. Copy `.env.example` to `.env` and edit settings (see [Environment configuration](#environment-configuration))
+5. `.\dl_models.ps1` to fetch local-only models (or place assets in `LLM-BASE/`,
+   `vrm/`, `voice/`)
+6. Run: `python -m scripts.ui_launcher`
+# main
 
    ```bash
    python -m venv .venv
@@ -46,11 +58,20 @@ details.
 
 The `.env` file controls runtime behaviour:
 
+# codex/resolve-conflict-in-readme.md-aiaq9m
 - `LLAMA_MODEL_PATH` - path to a local GGUF model
 - `OPENAI_API_KEY` - enables online LLM calls when `ONLINE_MODE=true`
 - `WAKE_MODEL_PATH`, `WHISPER_MODEL_PATH`, `PIPER_MODEL_PATH` - optional
   wake-word, STT and TTS models
 - `MEMORY_ROOT` - where per-user memories are stored (defaults to `config/`)
+=======
+- `LLAMA_MODEL_PATH` – path to a local GGUF model
+- `OPENAI_API_KEY` – enables online LLM calls when `ONLINE_MODE=true`
+- `VSEEFACE_PATH` / `VSEEFACE_MODEL` – launch VSeeFace with a specific VRM
+- `WAKE_MODEL_PATH`, `WHISPER_MODEL_PATH`, `PIPER_MODEL_PATH` – optional
+  wake‑word, STT and TTS models
+- `MEMORY_ROOT` – where per‑user memories are stored (defaults to `config/`)
+# main
 
 ### Unity VRM setup
 
