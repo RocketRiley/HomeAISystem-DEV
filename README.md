@@ -10,10 +10,12 @@ Local-first VTuber companion (Clair) with:
 
 ## Quick Start
 1. Clone repo
-2. `python -m venv .venv && .\.venv\Scripts\Activate.ps1`
+2. `python -m venv .venv`
+   - Windows: `\.venv\Scripts\Activate.ps1`
+   - macOS/Linux: `source .venv/bin/activate`
 3. `python -m scripts.setup`  # installs dependencies and creates `.env`
 4. Edit `.env` settings (see [Environment configuration](#environment-configuration))
-5. `.\dl_models.ps1` to fetch local-only models (or place assets in `LLM-BASE/`, `vrm/`, `voice/`)
+5. `./dl_models.ps1` (PowerShell) to fetch local-only models, or manually place assets in `LLM-BASE/`, `vrm/`, `voice/`
 6. Run: `python -m scripts.ui_launcher`
 
 See `docs/EXTERNAL_DEPENDENCIES.txt` for optional audio/vision and Unity setup steps.
