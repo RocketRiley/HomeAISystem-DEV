@@ -1,4 +1,5 @@
-"""Send PAD emotion values to VSeeFace over OSC."""
+"""Send PAD emotion values to an OSC receiver (e.g., Unity)."""
+
 from __future__ import annotations
 
 import os
@@ -25,7 +26,7 @@ def _client() -> Optional[SimpleUDPClient]:
 
 
 def send_pad(p: float, a: float, d: float) -> None:
-    """Map Pleasure‑Arousal‑Dominance values to VSeeFace blendshapes."""
+    """Map Pleasure‑Arousal‑Dominance values to OSC avatar parameters."""
     c = _client()
     if c is None:
         return
