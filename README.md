@@ -9,18 +9,26 @@ Local-first VTuber companion (Clair) with:
 - Logging & diagnostics
 - Tiered memory system with long-term persistence
 
-## Quick Start
+## Quick Start (10 steps)
 
-1. Clone repo
+1. Clone repo.
 2. `python -m venv .venv && .\.venv\Scripts\Activate.ps1`
-3. `pip install -r requirements.txt`
-4. Copy `.env.example` to `.env` and edit settings (see [Environment configuration](#environment-configuration))
-5. `.\dl_models.ps1` to fetch local-only models (or place assets in `LLM-BASE/`,
-   `vrm/`, `voice/`)
-6. Start the voice loop: `python -m scripts.voice_loop_stub`
-7. (Optional) Expose settings to Unity: `python -m scripts.settings_server`
+   (or `source .venv/bin/activate` on Linux/Mac).
+3. `pip install -r requirements.txt`.
+4. Copy `.env.example` to `.env` and fill in paths or keys.
+5. Run `./dl_models.ps1` to download sample models **or** drop your own
+   GGUF, STT and TTS models into `LLM-BASE/`, `voice/`, etc.
+6. Open `unity_project/` in **Unity Hub** (Unity 2022 LTS).
+7. Via *Package Manager* install **UniVRM** and **OscJack**.
+8. Drag your avatar `.vrm` into `Assets/CharacterModels/`, your room model
+   into `Assets/RoomModels/`, and open `Assets/Scenes/Main.unity`.
+9. Start the Python side: `python -m scripts.voice_loop_stub` (optional
+   settings server: `python -m scripts.settings_server`).
+10. Press **Play** in Unity – Clair faces the camera, roams if enabled, and
+    responds using STT/TTS out of the box.
 
-See `docs/EXTERNAL_DEPENDENCIES.txt` for optional audio/vision and Unity setup steps.
+See `docs/EXTERNAL_DEPENDENCIES.txt` for optional audio/vision setup
+details.
 
 ### Environment configuration
 
