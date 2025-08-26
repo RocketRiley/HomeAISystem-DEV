@@ -35,10 +35,11 @@ The `.env` file controls runtime behaviour:
 ### Unity VRM setup
 
 A starter Unity project lives in `unity_project/` with scripts for
-`PADReceiver`, `LookAtCamera` and `RoamController`. See
-[`docs/UnitySetupManual.md`](docs/UnitySetupManual.md) for a
-beginner-friendly, step-by-step manual covering Unity installation,
-importing a VRM, installing **UniVRM** and **OscJack**, attaching the
+`PADReceiver`, `LookAtCamera` and `RoamController`. It also contains
+empty `Assets/CharacterModels/` and `Assets/RoomModels/` folders for
+avatars and room prefabs. See [`docs/UnitySetupManual.md`](docs/UnitySetupManual.md)
+for a beginner-friendly, step-by-step manual covering Unity
+installation, importing a VRM, installing **UniVRM** and **OscJack**, attaching the
 scripts, and connecting to the Python runtime.
 
 ## Notes

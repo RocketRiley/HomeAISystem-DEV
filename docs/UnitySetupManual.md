@@ -15,7 +15,9 @@ It assumes no prior Unity experience.
 1. In Unity Hub click **Open** and select the `unity_project/` folder.
 2. When prompted, allow Unity to upgrade any project files.
 3. Once loaded you should see the Unity editor with the **Hierarchy**,
-   **Scene**, **Game** and **Inspector** panels.
+   **Scene**, **Game** and **Inspector** panels. The project includes
+   empty `Assets/CharacterModels/` and `Assets/RoomModels/` folders for
+   organising avatars and environments.
 
 ## 3. Import UniVRM
 
@@ -29,7 +31,7 @@ UniVRM lets Unity read `.vrm` avatar files.
 
 ## 4. Add your VRM Avatar
 
-1. Drag your `.vrm` file into the Project window under `Assets/`.
+1. Drag your `.vrm` file into `Assets/CharacterModels/` in the Project window.
 2. Unity will import it as a prefab; drag the prefab into the **Hierarchy**.
 3. Reset the avatar's position to `(0,0,0)` if needed.
 
@@ -58,7 +60,8 @@ OscJack lets the Python runtime drive avatar blendshapes.
 
 ## 8. Import the Room Environment
 
-1. Drag a room model (`.fbx`, `.glb`, `.obj`, `.ply`, etc.) into `Assets/`.
+1. Drag a room model (`.fbx`, `.glb`, `.obj`, `.ply`, etc.) into
+   `Assets/RoomModels/`.
 2. Add the room prefab to the **Hierarchy** and place the avatar inside it.
 3. Adjust the scale and lighting as needed to match the room.
 
