@@ -1,7 +1,7 @@
-﻿# HomeAISystem-DEV
+# HomeAISystem-DEV
 
 Local-first VTuber companion (Clair) with:
-- Local LLM (llama.cpp via `llama-cpp-python`)
+- Local LLM (llama-cpp via `llama-cpp-python`)
 - GUI launcher + chat window
 - TTS/STT hooks
 - VSeeFace (OSC) bridge for expressions, idle motion, lip-sync
@@ -11,8 +11,8 @@ Local-first VTuber companion (Clair) with:
 ## Quick Start
 1. Clone repo
 2. `python -m venv .venv && .\.venv\Scripts\Activate.ps1`
-3. `pip install -r requirements.txt`
-4. Copy `.env.example` to `.env` and edit settings (see [Environment configuration](#environment-configuration))
+3. `python -m scripts.setup`  # installs dependencies and creates `.env`
+4. Edit `.env` settings (see [Environment configuration](#environment-configuration))
 5. `.\dl_models.ps1` to fetch local-only models (or place assets in `LLM-BASE/`, `vrm/`, `voice/`)
 6. Run: `python -m scripts.ui_launcher`
 
@@ -25,14 +25,14 @@ The `.env` file controls runtime behaviour:
 - `LLAMA_MODEL_PATH` – path to a local GGUF model
 - `OPENAI_API_KEY` – enables online LLM calls when `ONLINE_MODE=true`
 - `VSEEFACE_PATH` / `VSEEFACE_MODEL` – launch VSeeFace with a specific VRM
-- `WAKE_MODEL_PATH`, `WHISPER_MODEL_PATH`, `PIPER_MODEL_PATH` – optional wake‑word, STT and TTS models
-- `MEMORY_ROOT` – where per‑user memories are stored (defaults to `config/`)
+- `WAKE_MODEL_PATH`, `WHISPER_MODEL_PATH`, `PIPER_MODEL_PATH` – optional wake-word, STT and TTS models
+- `MEMORY_ROOT` – where per-user memories are stored (defaults to `config/`)
 
 ### Unity VRM setup
 
 A starter Unity project lives in `unity_project/` with a `PADReceiver` script
 that listens for PAD values over OSC. See [`docs/UnitySetupManual.md`](docs/UnitySetupManual.md)
-for a beginner‑friendly, step‑by‑step manual covering Unity installation,
+for a beginner-friendly, step-by-step manual covering Unity installation,
 importing a VRM, installing **UniVRM** and **OscJack**, attaching `PADReceiver`,
 and connecting to the Python runtime.
 
@@ -55,12 +55,12 @@ is isolated per user.
 
 ### Memory tiers
 
-Clair uses a five‑tier memory stack:
+Clair uses a five-tier memory stack:
 
 1. **Active** – the last few utterances, kept in RAM
-2. **Short‑term** – a 24‑hour session log
-3. **Mid‑term** – time‑limited project notes
-4. **Long‑term** – a curated knowledge graph of important facts
+2. **Short-term** – a 24-hour session log
+3. **Mid-term** – time-limited project notes
+4. **Long-term** – a curated knowledge graph of important facts
 5. **Archive** – compressed storage for everything else
 
 A background consolidator promotes or archives items so the system can run for
