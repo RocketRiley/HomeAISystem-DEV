@@ -48,12 +48,12 @@ def simple_mood(memory_manager: MemoryManager) -> str:
 def main() -> None:
     # Paths
     base = Path(__file__).resolve().parent.parent
-    mem_path = base / "config" / "memory.json"
     tasks_path = base / "config" / "tasks.json"
     calendar_path = base / "config" / "calendar_events.json"
     contacts_path = base / "config" / "contacts.json"
+    user_id = "default"
     # Load managers
-    mm = MemoryManager(mem_path)
+    mm = MemoryManager(user_id)
     tm = TaskManager(tasks_path)
     cal = CalendarIntegration(calendar_path)
     # Personal calendars (Clair and user)
