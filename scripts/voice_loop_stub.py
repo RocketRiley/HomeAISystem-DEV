@@ -40,7 +40,6 @@ listening state.
 """
 
 import os
-import queue
 import threading
 import time
 from pathlib import Path
@@ -48,12 +47,17 @@ from typing import Optional
 
 try:
     import sounddevice as sd  # type: ignore
-except ImportError:
-    sd = None  # sounddevice optional; if missing the script prints prompts instead
+except Exception:
+    sd = None
+
+try:
+    from faster_whisper import WhisperModel  # type: ignore
+except Exception:
+    WhisperModel = None
 
 try:
     from openWakeWord import WakeWordEngine  # type: ignore
-except ImportError:
+except Exception:
     WakeWordEngine = None
 
 
@@ -75,13 +79,25 @@ class DummyWakeWord:
         pass
 
 
-class DummySTT:
-    """Fallback streaming STT that reads from terminal instead of mic."""
-    def __init__(self):
-        pass
+class WhisperSTT:
+    """Simple microphone recorder backed by faster‑whisper."""
+
+    def __init__(self, model_path: Optional[str] = None) -> None:
+        if WhisperModel is None or sd is None:
+            raise RuntimeError("faster-whisper or sounddevice not available")
+        model_name = model_path or os.getenv("WHISPER_MODEL", "small")
+        self.model = WhisperModel(model_name)
+
     def listen(self) -> str:
-        text = input("(Say something) > ")
-        return text
+        samplerate = 16000
+        duration = float(os.getenv("STT_WINDOW", "5"))
+        if sd is None:
+            return input("(Say something) > ")
+        recording = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=1)
+        sd.wait()
+        audio = recording.flatten()
+        segments, _ = self.model.transcribe(audio, sampling_rate=samplerate)
+        return "".join(seg.text for seg in segments).strip()
 
 
 class PiperTTS:
@@ -147,11 +163,17 @@ def main() -> None:
     else:
         ww_engine = DummyWakeWord()
     # Placeholder STT and TTS
-    stt = DummySTT()
+    try:
+        stt = WhisperSTT()
+    except Exception:
+        class DummySTT:
+            def listen(self) -> str:
+                return input("(Say something) > ")
+
+        stt = DummySTT()
     tts = PiperTTS()
     print("Voice loop ready. Say the wake word to begin.")
     # Start wake word detection
-    stop_event = threading.Event()
     def on_wake():
         print("Wake word detected. Listening…")
         # Listen for a phrase

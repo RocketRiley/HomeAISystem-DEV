@@ -8,6 +8,13 @@
 python-osc>=1.7.4
 websockets>=10.4
 python-dotenv>=0.21.0
+# Optional sensory and voice frameworks
+opencv-python>=4.8.0
+sounddevice>=0.4.5
+numpy>=1.24
+faster-whisper>=0.8.0
+piper-tts>=0.3.0
+openwakeword>=0.7.0
 # Open‑source LLM support (requires a local .gguf model)
 llama-cpp-python>=0.2.0
 openai>=1.0.0  # required only for online mode; safe to omit if running offline
