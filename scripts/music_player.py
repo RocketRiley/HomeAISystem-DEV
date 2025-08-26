@@ -15,9 +15,6 @@ or call ``yt-dlp`` to download and play audio.
 from __future__ import annotations
 
 import webbrowser
-from typing import Any
-
-
 def play_music(query: str) -> None:
     """Play music based on a search query or URL.
 

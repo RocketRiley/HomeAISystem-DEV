@@ -18,13 +18,12 @@ Usage:
 
 import sys
 from datetime import datetime, timedelta
-from pathlib import Path
 from memory_manager import MemoryManager  # type: ignore
 
 
 def main(date_str: str) -> None:
-    mem_path = Path(__file__).resolve().parent.parent / "config" / "memory.json"
-    mm = MemoryManager(mem_path)
+    user_id = "default"
+    mm = MemoryManager(user_id)
     summary = mm.summarise_day(date_str)
     print(summary)
 
