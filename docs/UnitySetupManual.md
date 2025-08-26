@@ -21,7 +21,7 @@ It assumes no prior Unity experience.
 
 UniVRM lets Unity read `.vrm` avatar files.
 
-1. Open **Window → Package Manager**.
+1. Open **Window -> Package Manager**.
 2. Click the **+** button and choose *Add package from git URL*.
 3. Paste `https://github.com/vrm-c/UniVRM.git?path=/Assets/VRMShaders`
    and press *Add*.
@@ -31,7 +31,7 @@ UniVRM lets Unity read `.vrm` avatar files.
 
 1. Drag your `.vrm` file into the Project window under `Assets/`.
 2. Unity will import it as a prefab; drag the prefab into the **Hierarchy**.
-3. Reset the avatar’s position to `(0,0,0)` if needed.
+3. Reset the avatar's position to `(0,0,0)` if needed.
 
 ## 5. Install OscJack
 
@@ -46,8 +46,8 @@ OscJack lets the Python runtime drive avatar blendshapes.
 1. In the Project window open `Assets/Scripts/` and confirm
    `PADReceiver.cs` exists.
 2. Select the avatar root in the **Hierarchy**.
-3. In the **Inspector** click **Add Component** → type `PADReceiver`.
-4. Assign the avatar’s `Animator` to the component’s field.
+3. In the **Inspector** click **Add Component** -> type `PADReceiver`.
+4. Assign the avatar's `Animator` to the component's field.
 
 ## 7. Configure the Scene
 
@@ -56,26 +56,38 @@ OscJack lets the Python runtime drive avatar blendshapes.
 3. Ensure there is a camera pointing at the avatar and at least one
    light source.
 
-## 8. Connect to the Python Runtime
+## 8. Import the Room Environment
+
+1. Drag a room model (`.fbx`, `.glb`, `.obj`, `.ply`, etc.) into `Assets/`.
+2. Add the room prefab to the **Hierarchy** and place the avatar inside it.
+3. Adjust the scale and lighting as needed to match the room.
+
+## 9. Camera and Roaming
+
+1. Attach `LookAtCamera.cs` to the avatar so she faces the main camera while speaking.
+2. Attach `RoamController.cs` to enable wandering; bake a NavMesh for the room.
+3. Toggle `enableRoam` in the component to let Clair walk around the room.
+
+## 10. Connect to the Python Runtime
 
 1. Run the Python voice loop: `python -m scripts.voice_loop_stub`.
 2. When conversations occur, the Python app sends PAD values over OSC on
    port **9000**.
 3. With the Unity scene in **Play** mode, the avatar should mirror
-   Clair’s emotions.
+   Clair's emotions.
 
-## 9. Basic Unity Usage
+## 11. Basic Unity Usage
 
-- **Play Mode**: Press the ▶️ button to run the scene; press again to
+- **Play Mode**: Press the Play button to run the scene; press again to
   stop.
 - **Moving objects**: Use the W/E/R keys to translate, rotate, or scale
   selected objects in the Scene view.
 - **Saving**: Unity auto-saves assets, but press **Ctrl+S** to save the
   current scene.
-- **Building**: From **File → Build Settings**, add `Scenes/Main.unity`
+- **Building**: From **File -> Build Settings**, add `Scenes/Main.unity`
   and build a standalone app if desired.
 
-## 10. Troubleshooting
+## 12. Troubleshooting
 
 - If the avatar does not move, ensure the Python voice loop is running
   and `PADReceiver` shows OSC messages in the Console.

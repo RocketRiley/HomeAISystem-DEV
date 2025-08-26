@@ -1,4 +1,4 @@
-﻿# HomeAISystem-DEV
+# HomeAISystem-DEV
 
 Local-first VTuber companion (Clair) with:
 
@@ -26,19 +26,20 @@ See `docs/EXTERNAL_DEPENDENCIES.txt` for optional audio/vision and Unity setup s
 
 The `.env` file controls runtime behaviour:
 
-- `LLAMA_MODEL_PATH` – path to a local GGUF model
-- `OPENAI_API_KEY` – enables online LLM calls when `ONLINE_MODE=true`
-- `WAKE_MODEL_PATH`, `WHISPER_MODEL_PATH`, `PIPER_MODEL_PATH` – optional
-  wake‑word, STT and TTS models
-- `MEMORY_ROOT` – where per‑user memories are stored (defaults to `config/`)
+- `LLAMA_MODEL_PATH` - path to a local GGUF model
+- `OPENAI_API_KEY` - enables online LLM calls when `ONLINE_MODE=true`
+- `WAKE_MODEL_PATH`, `WHISPER_MODEL_PATH`, `PIPER_MODEL_PATH` - optional
+  wake-word, STT and TTS models
+- `MEMORY_ROOT` - where per-user memories are stored (defaults to `config/`)
 
 ### Unity VRM setup
 
-A starter Unity project lives in `unity_project/` with a `PADReceiver` script
-that listens for PAD values over OSC. See [`docs/UnitySetupManual.md`](docs/UnitySetupManual.md)
-for a beginner‑friendly, step‑by‑step manual covering Unity installation,
-importing a VRM, installing **UniVRM** and **OscJack**, attaching `PADReceiver`,
-and connecting to the Python runtime.
+A starter Unity project lives in `unity_project/` with scripts for
+`PADReceiver`, `LookAtCamera` and `RoamController`. See
+[`docs/UnitySetupManual.md`](docs/UnitySetupManual.md) for a
+beginner-friendly, step-by-step manual covering Unity installation,
+importing a VRM, installing **UniVRM** and **OscJack**, attaching the
+scripts, and connecting to the Python runtime.
 
 ## Notes
 
@@ -60,13 +61,13 @@ is isolated per user.
 
 ### All Memory Tiers
 
-Clair uses a five‑tier memory stack:
+Clair uses a five-tier memory stack:
 
-1. **Active** – the last few utterances, kept in RAM
-2. **Short‑term** – a 24‑hour session log
-3. **Mid‑term** – time‑limited project notes
-4. **Long‑term** – a curated knowledge graph of important facts
-5. **Archive** – compressed storage for everything else
+1. **Active** - the last few utterances, kept in RAM
+2. **Short-term** - a 24-hour session log
+3. **Mid-term** - time-limited project notes
+4. **Long-term** - a curated knowledge graph of important facts
+5. **Archive** - compressed storage for everything else
 
 A background consolidator promotes or archives items so the system can run
 for years without unbounded growth.
