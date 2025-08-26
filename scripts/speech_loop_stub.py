@@ -21,9 +21,8 @@ import json
 import os
 import random
 import re
-import sys
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 # Import opinion and filter systems
 try:
@@ -37,6 +36,8 @@ try:
     from .personal_calendar_manager import PersonalCalendar  # type: ignore
     from .music_player import play_music  # type: ignore
     from .llm_adapter import generate_response  # type: ignore
+    from .emotion_style import style_from_pad  # type: ignore
+    from .osc_bridge_stub import send_pad  # type: ignore
 except ImportError:
     # Fallback for direct execution without package context
     from opinion_system import OpinionManager  # type: ignore
@@ -48,6 +49,8 @@ except ImportError:
     from personal_calendar_manager import PersonalCalendar  # type: ignore
     from music_player import play_music  # type: ignore
     from llm_adapter import generate_response  # type: ignore
+    from emotion_style import style_from_pad  # type: ignore
+    from osc_bridge_stub import send_pad  # type: ignore
 
 
 def load_persona_examples():
@@ -146,18 +149,58 @@ def main() -> None:
 
     state = "awake"
     active_emotions: Dict[str, float] = {}
+    history: List[Dict[str, str]] = []
+    hide_identity = os.getenv("HIDE_AI_IDENTITY", "false").lower() in {"true", "1", "yes"}
 
     # Instantiate memory, contacts, tasks and calendar managers
-    mem_path = Path(__file__).resolve().parent.parent / "config" / "memory.json"
+    user_id = os.getenv("USER_ID", "default")
     contacts_path = Path(__file__).resolve().parent.parent / "config" / "contacts.json"
     tasks_path = Path(__file__).resolve().parent.parent / "config" / "tasks.json"
     calendar_path = Path(__file__).resolve().parent.parent / "config" / "calendar_events.json"
-    memory_manager = MemoryManager(mem_path)
+    memory_manager = MemoryManager(user_id)
     contact_manager = ContactManager(contacts_path)
     task_manager = TaskManager(tasks_path)
     calendar_integration = CalendarIntegration(calendar_path)
     # Personal calendars for Clair and the user
     personal_calendar = PersonalCalendar(Path(__file__).resolve().parent.parent / "config")
+
+    # Optional sensory monitors
+    try:
+        from .vision_monitor import start_vision_monitor  # type: ignore
+    except Exception:  # pragma: no cover
+        try:
+            from vision_monitor import start_vision_monitor  # type: ignore
+        except Exception:  # pragma: no cover
+            start_vision_monitor = None  # type: ignore
+    try:
+        from .audio_monitor import start_audio_monitor  # type: ignore
+    except Exception:  # pragma: no cover
+        try:
+            from audio_monitor import start_audio_monitor  # type: ignore
+        except Exception:  # pragma: no cover
+            start_audio_monitor = None  # type: ignore
+    if start_vision_monitor:
+        try:
+            start_vision_monitor()
+        except Exception:
+            pass
+    if start_audio_monitor:
+        try:
+            start_audio_monitor()
+        except Exception:
+            pass
+
+    dev_mode = os.getenv("DEV_MODE", "true").lower() in {"true", "1", "yes"}
+    if not dev_mode:
+        print(
+            "THIS PROJECT IS UNDER PERMANENT DEVELOPMENT.\n"
+            "If Clair misbehaves, shut her down and report the issue."
+        )
+        ack = input("Type 'I AGREE' to continue: ").strip().lower()
+        if ack != "i agree":
+            print("Exiting.")
+            return
+
     print(
         "Clair is ready. You can chat or issue commands.\n"
         "Commands:\n"
@@ -181,51 +224,40 @@ def main() -> None:
         "Type 'sleep' to put Clair to sleep and 'wake' to wake her. Type 'exit' to quit."
     )
 
-    while True:
-        # Before prompting the user, optionally speak proactively based on tasks and events
-        def maybe_auto_speak() -> None:
-            """Proactively remind about tasks due today or upcoming events.
+    from datetime import datetime
 
-            This helper is called at the start of each loop iteration to
-            implement a basic self‑start system.  If the environment
-            variable ``SELF_START`` is set to a truthy value (default:
-            ``true``), Clair will automatically announce due tasks
-            or events occurring on the current day whenever she is
-            awake.  Setting ``SELF_START=false`` disables this behaviour.
+    first_run = True
 
-            In a production system you might run this on a timer
-            instead of on every user input.
-            """
-            nonlocal state
-            # Honour the SELF_START setting
-            if os.getenv("SELF_START", "true").lower() in {"false", "0", "no"}:
-                return
-            # Only speak if awake
-            if state != "awake":
-                return
-            from datetime import datetime
-            today = datetime.utcnow().date().isoformat()
-            # Check for due tasks
-            due_tasks = [t for t in task_manager.list_tasks(False) if t.get("due") and t["due"] <= today]
-            if due_tasks:
-                # Use the first due task for the reminder
-                t = due_tasks[0]
-                print(filter_pipeline.filter_text(
-                    f"Clair (auto): Reminder – task '{t['description']}' is due today ({t['due']})."
-                ))
-                return
-            # Check for personal calendar events today
-            events_today = personal_calendar.list_events("clair", today) + personal_calendar.list_events("user", today)
-            if events_today:
-                e = events_today[0]
-                print(filter_pipeline.filter_text(
-                    f"Clair (auto): Upcoming event at {e['start']} – {e['title']}."
-                ))
-                return
-            # Nothing urgent
+    def maybe_auto_speak() -> None:
+        nonlocal state, first_run
+        if os.getenv("SELF_START", "true").lower() in {"false", "0", "no"}:
             return
+        if state != "awake":
+            return
+        today = datetime.utcnow().date().isoformat()
+        due_tasks = [t for t in task_manager.list_tasks(False) if t.get("due") and t["due"] <= today]
+        if due_tasks:
+            t = due_tasks[0]
+            msg = f"Reminder – task '{t['description']}' is due today ({t['due']})."
+            print(filter_pipeline.filter_text(f"Clair (auto): {msg}"))
+            memory_manager.add_event(msg, participants=["clair"], tags=["task"])
+            return
+        events_today = personal_calendar.list_events("clair", today) + personal_calendar.list_events("user", today)
+        if events_today:
+            e = events_today[0]
+            msg = f"Upcoming event at {e['start']} – {e['title']}."
+            print(filter_pipeline.filter_text(f"Clair (auto): {msg}"))
+            memory_manager.add_event(msg, participants=["clair"], tags=["event"])
+            return
+        if first_run:
+            msg = random.choice(["Hey there!", "Hello!", "Hi, ready when you are."])
+            print(filter_pipeline.filter_text(f"Clair (auto): {msg}"))
+            memory_manager.add_event(msg, participants=["clair"], tags=["greeting"])
+            first_run = False
 
-        # Perform proactive reminder if self‑start is enabled
+    maybe_auto_speak()
+
+    while True:
         maybe_auto_speak()
         try:
             user_input = input("You: ").strip()
@@ -614,6 +646,10 @@ def main() -> None:
         active_emotions = update_emotions(active_emotions, user_input)
         # Compute PAD from active emotions
         pad = pad_from_emotions(active_emotions, emo_defs)
+        try:
+            send_pad(pad["P"], pad["A"], pad["D"])
+        except Exception:
+            pass
         # Apply contact feelings adjustment (bias mood by relationship)
         current_contact_id = "riley"  # in this demo we assume the user is Riley
         contact = contact_manager.get(current_contact_id)
@@ -629,22 +665,31 @@ def main() -> None:
             pad["D"] = max(-1.0, min(1.0, pad["D"] + 0.15 * cD))
         # Select a response state
         response_state = choose_state_from_pad(pad)
-        # Attempt to generate a reply via the online LLM
+        style = style_from_pad(pad)
+        # Attempt to generate a reply via the LLM
         reply: Optional[str] = None
         try:
-            reply = generate_response(user_input)
+            reply = generate_response(
+                user_input,
+                history=history,
+                human_mode=hide_identity,
+                style=style,
+            )
         except Exception:
-            # If generation fails, fallback to local
             reply = None
-        # If the online model provided a reply, use it; otherwise choose from examples
+        history.append({"role": "user", "content": user_input})
         if reply:
             response = reply
+            history.append({"role": "assistant", "content": reply})
         else:
             response = choose_line(response_state, examples)
+        if len(history) > 20:
+            history = history[-20:]
         # Filter the response according to the current filter level
         filtered = filter_pipeline.filter_text(response)
-        # Log the user input to memory
+        # Log the user input and response to memory
         memory_manager.add_event(user_input, participants=["user"], tags=["conversation"])
+        memory_manager.add_event(filtered, participants=["clair"], tags=["conversation"])
         # Respond
         print(f"Clair: {filtered}")
         # Decay emotions so they fade over time
