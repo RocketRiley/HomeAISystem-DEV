@@ -12,8 +12,20 @@ Local-first VTuber companion (Clair) with:
 ## Quick Start (10 steps)
 
 1. Clone repo.
-2. `python -m venv .venv && .\.venv\Scripts\Activate.ps1`
-   (or `source .venv/bin/activate` on Linux/Mac).
+2. Create and activate a virtual environment:
+
+   ```powershell
+   python -m venv .venv
+   .\\.venv\\Scripts\\Activate.ps1
+   ```
+
+   On Linux or Mac:
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
+
 3. `pip install -r requirements.txt`.
 4. Copy `.env.example` to `.env` and fill in paths or keys.
 5. Run `./dl_models.ps1` to download sample models **or** drop your own
