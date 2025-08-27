@@ -51,5 +51,4 @@ want full sensory interaction.
 1. `pip install dspy`
 2. Set `DSPY_MODEL` in `.env` (e.g., `gpt-3.5-turbo`).
 3. Run `python -m scripts.dspy_learning` to generate routine plans.
-=======
 

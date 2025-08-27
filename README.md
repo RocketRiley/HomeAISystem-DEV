@@ -10,40 +10,6 @@ Local-first VTuber companion (Clair) with:
 - Tiered memory system with long-term persistence
 
 
-## Quick Start (10 steps)
-
-1. Clone repo.
-2. Create and activate a virtual environment:
-
-   ```powershell
-   python -m venv .venv
-   .\\.venv\\Scripts\\Activate.ps1
-   ```
-
-   On Linux or Mac:
-
-
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate
-   ```
-
-3. `pip install -r requirements.txt`.
-4. Copy `.env.example` to `.env` and fill in paths or keys.
-5. Run `./dl_models.ps1` to download sample models **or** drop your own
-   GGUF, STT and TTS models into `LLM-BASE/`, `voice/`, etc.
-6. Open `unity_project/` in **Unity Hub** (Unity 2022 LTS).
-7. Via *Package Manager* install **UniVRM** and **OscJack**.
-8. Drag your avatar `.vrm` into `Assets/CharacterModels/`, your room model
-   into `Assets/RoomModels/`, and open `Assets/Scenes/Main.unity`.
-9. Start the Python side: `python -m scripts.voice_loop_stub` (optional
-   settings server: `python -m scripts.settings_server`).
-10. Press **Play** in Unity; Clair faces the camera, roams if enabled, and
-    responds using STT/TTS out of the box.
-
-See `docs/EXTERNAL_DEPENDENCIES.txt` for optional audio/vision setup
-details.
-
 
 ### Environment configuration
 
@@ -75,4 +41,37 @@ During development the application runs with `DEV_MODE` enabled by default. This
 skips the cinematic disclaimer and relaxes certain safety restrictions so that
 features can be tested quickly. To simulate the end-user experience, set
 `DEV_MODE=false` in your `.env`.
+
+
+## Memory directories
+
+Memory data lives under `MEMORY_ROOT` (defaults to `config/`) and each tier has
+its own folder:
+
+```text
+config/
+|-- short_term/
+|-- mid_term/
+|-- long_term/
+`-- archive/
+```
+
+### All Memory Tiers
+
+Clair persists information across five tiers, each stored under
+`MEMORY_ROOT`:
+
+| Tier       | Purpose                    | Directory              |
+|------------|----------------------------|------------------------|
+| Active     | in-RAM working context     | *(memory only)*        |
+| Short-term | 24-hour session log        | `config/short_term/`   |
+| Mid-term   | time-limited project notes | `config/mid_term/`     |
+| Long-term  | curated facts              | `config/long_term/`    |
+| Archive    | compressed history         | `config/archive/`      |
+
+A background consolidator promotes or archives items so the system can run
+for years without unbounded growth. See [`docs/Memory.md`](docs/Memory.md)
+for details.
+=======
+
 
