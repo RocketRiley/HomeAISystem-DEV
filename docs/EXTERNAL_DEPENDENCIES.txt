@@ -45,8 +45,10 @@ want full sensory interaction.
 6. Configure an OSC receiver to accept PAD values on port `9000`.
 7. Press Play; the Python side will drive emotions via OSC.
 
+
 ## Learning and Planning (DSPy)
 
 1. `pip install dspy`
 2. Set `DSPY_MODEL` in `.env` (e.g., `gpt-3.5-turbo`).
 3. Run `python -m scripts.dspy_learning` to generate routine plans.
+
