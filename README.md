@@ -89,8 +89,10 @@ skips the cinematic disclaimer and relaxes certain safety restrictions so that
 features can be tested quickly. To simulate the end-user experience, set
 `DEV_MODE=false` in your `.env`.
 
-All memory files live under `MEMORY_ROOT` (defaults to `config/`). Each tier
-writes to its own subfolder so data remains isolated per user:
+## Memory directories
+
+Memory data lives under `MEMORY_ROOT` (defaults to `config/`) and each tier has
+its own folder:
 
 ```text
 config/
