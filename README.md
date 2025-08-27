@@ -96,21 +96,21 @@ its own folder:
 
 ```text
 config/
-├── short_term/
-├── mid_term/
-├── long_term/
-└── archive/
+|-- short_term/
+|-- mid_term/
+|-- long_term/
+`-- archive/
 ```
 
 ### All Memory Tiers
 
 Clair persists information across five tiers:
 
-1. **Active** – last few utterances kept in RAM
-2. **Short-term** – 24-hour session log in `config/short_term/`
-3. **Mid-term** – time-limited project notes in `config/mid_term/`
-4. **Long-term** – curated facts in `config/long_term/`
-5. **Archive** – compressed history in `config/archive/`
+1. **Active** - last few utterances kept in RAM
+2. **Short-term** - 24-hour session log in `config/short_term/`
+3. **Mid-term** - time-limited project notes in `config/mid_term/`
+4. **Long-term** - curated facts in `config/long_term/`
+5. **Archive** - compressed history in `config/archive/`
 
 A background consolidator promotes or archives items so the system can run
 for years without unbounded growth. See `docs/Memory.md` for details.
