@@ -89,19 +89,18 @@ skips the cinematic disclaimer and relaxes certain safety restrictions so that
 features can be tested quickly. To simulate the end-user experience, set
 `DEV_MODE=false` in your `.env`.
 
-All memory files are stored under the directory defined by `MEMORY_ROOT`
-(defaults to `config/`). Each handler receives its own subdirectory so data
-is isolated per user.
+All memory files live under `MEMORY_ROOT` (defaults to `config/`). Each tier
+writes to its own subfolder so data remains isolated per user.
 
 ### All Memory Tiers
 
-Clair uses a five-tier memory stack:
+Clair persists information across five tiers:
 
-1. **Active** - the last few utterances, kept in RAM
-2. **Short-term** - a 24-hour session log
-3. **Mid-term** - time-limited project notes
-4. **Long-term** - a curated knowledge graph of important facts
-5. **Archive** - compressed storage for everything else
+1. **Active** – last few utterances kept in RAM
+2. **Short-term** – 24-hour session log in `config/short_term/`
+3. **Mid-term** – time-limited project notes in `config/mid_term/`
+4. **Long-term** – curated facts in `config/long_term/`
+5. **Archive** – compressed history in `config/archive/`
 
 A background consolidator promotes or archives items so the system can run
-for years without unbounded growth. See [docs/Memory.md](docs/Memory.md) for details.
+for years without unbounded growth. See `docs/Memory.md` for details.
