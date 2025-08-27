@@ -90,7 +90,15 @@ features can be tested quickly. To simulate the end-user experience, set
 `DEV_MODE=false` in your `.env`.
 
 All memory files live under `MEMORY_ROOT` (defaults to `config/`). Each tier
-writes to its own subfolder so data remains isolated per user.
+writes to its own subfolder so data remains isolated per user:
+
+```text
+config/
+├── short_term/
+├── mid_term/
+├── long_term/
+└── archive/
+```
 
 ### All Memory Tiers
 
