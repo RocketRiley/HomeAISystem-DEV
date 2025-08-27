@@ -18,3 +18,5 @@ openwakeword>=0.7.0
 # Open‑source LLM support (requires a local .gguf model)
 llama-cpp-python>=0.2.0
 openai>=1.0.0  # required only for online mode; safe to omit if running offline
+# Experimental learning framework
+dspy>=3.0.2
