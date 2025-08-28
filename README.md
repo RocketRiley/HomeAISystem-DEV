@@ -27,6 +27,23 @@ Local-first VTuber companion (Clair) with:
    source .venv/bin/activate
    ```
 
+ codex/resolve-conflict-in-readme.md-ookl8l
+3. Run `python -m scripts.preinstall` to install Python dependencies,
+   download sample models, create `.env`, and set up Unity asset folders.
+4. Review `.env` and fill in any paths or keys.
+5. Open `unity_project/` in **Unity Hub** (Unity 2022 LTS).
+6. Via *Package Manager* install **UniVRM** and **OscJack**.
+7. Drag your avatar `.vrm` into `Assets/CharacterModels/`.
+8. Drag your room model into `Assets/RoomModels/` and open
+   `Assets/Scenes/Main.unity`.
+9. Start the Python voice loop: `python -m scripts.voice_loop_stub`.
+   Optionally start `python -m scripts.settings_server` for runtime
+   configuration.
+10. Press **Play** in Unity; Clair faces the camera, roams if enabled,
+    and responds using STT/TTS out of the box.
+
+See `docs/EXTERNAL_DEPENDENCIES.txt` for required audio/vision setup
+=======
 3. `pip install -r requirements.txt`.
 4. Copy `.env.example` to `.env` and fill in paths or keys.
 5. Run `./dl_models.ps1` to download sample models **or** drop your own
@@ -44,11 +61,24 @@ Local-first VTuber companion (Clair) with:
     responds using STT/TTS out of the box.
 
 See `docs/EXTERNAL_DEPENDENCIES.txt` for optional audio/vision setup
+ main
 details.
 
 For smart home integration instructions see
 [`docs/SmartHome_Setup.md`](docs/SmartHome_Setup.md).
 
+ codex/resolve-conflict-in-readme.md-ookl8l
+### Troubleshooting
+
+If Clair fails to respond:
+
+- Run `python -m scripts.diagnostics` to print resolved model paths and
+  test OSC port connectivity.
+- Verify the `WHISPER_MODEL_PATH`, `PIPER_MODEL_PATH`, and
+  `LLAMA_MODEL_PATH` files exist.
+- Confirm your microphone and speakers are selectable in the OS audio
+  settings.
+=======
 ### Log rotation
 
 The assistant writes JSONL logs under `logs/`. `scripts/log_rotation.py` runs in
@@ -56,12 +86,38 @@ the background (started by `scripts.voice_loop_stub`) and rotates `stt.jsonl`,
 `llm.jsonl` and similar files once per day or when they exceed a configurable
 size. Archived logs are compressed and removed after 30 days by default.
 Adjust `LOG_ROTATION_SIZE_MB` and `LOG_RETENTION_DAYS` to tweak these settings.
+ main
 
 ### Environment configuration
 
 The `.env` file controls runtime behaviour:
 
+ codex/resolve-conflict-in-readme.md-ookl8l
+- `LLAMA_MODEL_PATH` - path to a local GGUF model
+- `OPENAI_API_KEY` - enables online LLM calls when `ONLINE_MODE=true`
+- `WAKE_WORD_MODEL`, `WHISPER_MODEL_PATH`, `PIPER_MODEL_PATH` - paths to the
+  wake-word, STT and TTS models required for voice interaction
+- `STT_ENGINE`, `TTS_ENGINE` - choose between bundled speech engines
+- `MQTT_HOST`, `MQTT_PORT`, `MQTT_USER`, `MQTT_PASS` - Home Assistant MQTT
+  broker details
+- `MEMORY_ROOT` - where per-user memories are stored (defaults to `config/`)
+- `FILTER_LEVEL` - content policy level applied to all generated text
+- `DSPY_MODEL` - model name used by the optional DSPy planning agent
 
+### Learning routines
+
+The repository includes an experimental planner powered by
+[DSPy](https://github.com/stanfordnlp/dspy) that generates human-like routines
+and stores them in memory. Try it with:
+
+```bash
+python -m scripts.dspy_learning
+```
+
+Set `DSPY_MODEL` in your `.env` to pick the language model backend.
+=======
+
+main
 
 ### Unity VRM setup
 
@@ -72,6 +128,8 @@ avatars and room prefabs. See [`docs/UnitySetupManual.md`](docs/UnitySetupManual
 for a beginner-friendly, step-by-step manual covering Unity
 installation, importing a VRM, installing **UniVRM** and **OscJack**, attaching the
 scripts, and connecting to the Python runtime.
+ codex/resolve-conflict-in-readme.md-ookl8l
+=======
 
 ### Standalone build
 
@@ -84,6 +142,7 @@ To produce a bundled player with the Python runtime:
    `Build/StandaloneBuild.cs`, which builds the game, copies `scripts/` and
    `assets/` into `Build/Data/`, and writes `run.bat` / `run.sh` wrappers that
    launch the Unity player and Python side by side.
+ main
 
 ## Notes
 
@@ -99,6 +158,37 @@ During development the application runs with `DEV_MODE` enabled by default. This
 skips the cinematic disclaimer and relaxes certain safety restrictions so that
 features can be tested quickly. To simulate the end-user experience, set
 `DEV_MODE=false` in your `.env`.
+ codex/resolve-conflict-in-readme.md-ookl8l
+
+## Memory directories
+
+Memory data lives under `MEMORY_ROOT` (defaults to `config/`) and each tier has
+its own folder:
+
+```text
+config/
+|-- short_term/
+|-- mid_term/
+|-- long_term/
+`-- archive/
+```
+
+### All Memory Tiers
+
+Clair organizes knowledge into five tiers rooted at `MEMORY_ROOT`:
+
+| Tier       | Purpose                       | Directory            |
+|------------|-------------------------------|----------------------|
+| Active     | in-RAM working context        | *(memory only)*      |
+| Short-term | 24-hour session log           | `config/short_term/` |
+| Mid-term   | time-limited project notes    | `config/mid_term/`   |
+| Long-term  | curated facts and preferences | `config/long_term/`  |
+| Archive    | compressed history            | `config/archive/`    |
+
+A background consolidator periodically promotes important items and prunes
+old ones to keep storage bounded. See
+[`docs/Memory.md`](docs/Memory.md) for details.
+=======
 
 
 ## Memory directories
@@ -106,3 +196,4 @@ features can be tested quickly. To simulate the end-user experience, set
 Memory data lives under `MEMORY_ROOT` (defaults to `config/`) and each tier has
 its own folder:
 
+ main
