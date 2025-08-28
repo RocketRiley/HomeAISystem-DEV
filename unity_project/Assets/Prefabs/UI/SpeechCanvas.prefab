@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1
+GameObject:
+  m_Name: SpeechCanvas
+  m_Component:
+  - component: {fileID: 22400000}
+  - component: {fileID: 22300000}
+  - component: {fileID: 11400000}
+  - component: {fileID: 11500000}
+  - component: {fileID: 11400001}
+  m_Layer: 5
+  m_IsActive: 1
+--- !u!224 &22400000
+RectTransform:
+  m_GameObject: {fileID: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 22400001}
+  - {fileID: 22400002}
+--- !u!223 &22300000
+Canvas:
+  m_GameObject: {fileID: 1}
+  m_RenderMode: 0
+--- !u!114 &11400000
+CanvasScaler:
+  m_GameObject: {fileID: 1}
+--- !u!115 &11500000
+GraphicRaycaster:
+  m_GameObject: {fileID: 1}
+--- !u!114 &11400001
+MonoBehaviour:
+  m_GameObject: {fileID: 1}
+  m_Script: {fileID: 11500000, guid: e6891264d57648c8a1c469c959a535c1, type: 3}
+  bubbleText: {fileID: 11400002}
+  subtitleText: {fileID: 11400003}
+  fadeDuration: 1
+  holdDuration: 2
+--- !u!1 &2
+GameObject:
+  m_Name: SpeechBubble
+  m_Component:
+  - component: {fileID: 22400001}
+  - component: {fileID: 11400002}
+  m_Layer: 5
+  m_IsActive: 1
+--- !u!224 &22400001
+RectTransform:
+  m_GameObject: {fileID: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_GameObject: {fileID: 2}
+  m_Script: {fileID: 11500000, guid: f04445c50a92b9d4b9912c9f1005a028, type: 3}
+  m_text: ""
+--- !u!1 &3
+GameObject:
+  m_Name: Subtitle
+  m_Component:
+  - component: {fileID: 22400002}
+  - component: {fileID: 11400003}
+  m_Layer: 5
+  m_IsActive: 1
+--- !u!224 &22400002
+RectTransform:
+  m_GameObject: {fileID: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &11400003
+MonoBehaviour:
+  m_GameObject: {fileID: 3}
+  m_Script: {fileID: 11500000, guid: f04445c50a92b9d4b9912c9f1005a028, type: 3}
+  m_text: ""
