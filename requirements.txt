@@ -15,6 +15,9 @@ numpy>=1.24
 faster-whisper>=0.8.0
 piper-tts>=0.3.0
 openwakeword>=0.7.0
+paho-mqtt>=1.6.1
 # Open‑source LLM support (requires a local .gguf model)
 llama-cpp-python>=0.2.0
 openai>=1.0.0  # required only for online mode; safe to omit if running offline
+# Experimental learning framework
+dspy>=3.0.2

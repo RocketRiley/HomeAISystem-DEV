@@ -1,36 +1,42 @@
 # External Framework Setup
 
 This project uses optional audio/vision and voice components.
-Install the following tools before running `scripts/ui_launcher.py` if you
+Install the following tools before running the voice loop if you
 want full sensory interaction.
 
 ## Wake Word
+
 1. `pip install openwakeword`
 2. Download or train a wake word model (`.tflite`).
-3. Set `WAKE_MODEL_PATH` in `.env` to the model file.
+3. Set `WAKE_WORD_MODEL` in `.env` to the model file.
 
 ## Speech-to-Text
+
 1. `pip install faster-whisper`
 2. Download a Whisper model (e.g., `small.en`).
 3. Set `WHISPER_MODEL_PATH` in `.env`.
 
 ## Text-to-Speech
+
 1. `pip install piper-tts`
 2. Download a Piper voice model (`.onnx`).
-3. Set `PIPER_MODEL_PATH` and `PIPER_SPEAKER` in `.env`.
+3. Set `PIPER_MODEL_PATH` and `PIPER_VOICE` in `.env`.
 
 ## Microphone Access
+
 1. `pip install sounddevice numpy`
 2. Verify the microphone works: `python -m sounddevice`
 3. No additional configuration needed; `scripts/audio_monitor.py`
    will auto-detect the default input device.
 
 ## Camera Access
+
 1. `pip install opencv-python`
 2. Ensure a webcam is connected.
 3. Run `python -m scripts.vision_monitor` to test.
 
 ## Unity VRM Environment
+
 1. Install **Unity 2022 LTS**.
 2. Create a new 3D project and open the `unity_project/` folder in this repo.
 3. Install the **UniVRM** package (`https://github.com/vrm-c/UniVRM`).
@@ -39,3 +45,8 @@ want full sensory interaction.
 6. Configure an OSC receiver to accept PAD values on port `9000`.
 7. Press Play; the Python side will drive emotions via OSC.
 
+## Learning and Planning (DSPy)
+
+1. `pip install dspy`
+2. Set `DSPY_MODEL` in `.env` (e.g., `gpt-3.5-turbo`).
+3. Run `python -m scripts.dspy_learning` to generate routine plans.

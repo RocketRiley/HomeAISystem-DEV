@@ -17,15 +17,16 @@ set the `WAKE_WORD_MODEL` environment variable or modify the
 **STT**:  We recommend the `faster‑whisper` library for streaming
 speech recognition.  It runs Whisper models on your CPU or GPU.  See
 <https://github.com/guillaumekln/faster-whisper> for installation and
-usage.  This script contains a placeholder class with the same
-interface; replace it with real calls when you have the model
-weights available locally.
+usage.  Alternative placeholders for Vosk or a remote service are
+provided and can be selected via the ``STT_ENGINE`` environment
+variable.
 
 **TTS**:  For speech synthesis, you can use the `piper` project
-(<https://github.com/rhasspy/piper>) or `XTTS` from Coqui TTS.  Both
-support on‑device voices.  Here we define a simple wrapper that
-invokes ``piper`` via subprocess; you should customise it to your
-installed voices and adjust the call accordingly.
+(<https://github.com/rhasspy/piper>), Coqui `XTTS`, Suno `Bark`, or
+`DiffSinger` for singing voices.  These engines, along with a generic
+server option, can be chosen through the ``TTS_ENGINE`` environment
+variable.  Here we define simple placeholders; integrate them with
+real engines for production use.
 
 To run this script you need to install the above packages and place
 the corresponding models in the ``models/`` directory or update
@@ -44,6 +45,15 @@ import threading
 import time
 from pathlib import Path
 from typing import Optional
+
+from osc_bridge_stub import send_mouth_open, send_pad
+
+try:
+    from smarthome_bridge import SmartHomeBridge  # type: ignore
+    from dspy_smarthome_parser import SmartHomeCommandParser  # type: ignore
+except Exception:  # pragma: no cover - optional dependencies
+    SmartHomeBridge = None  # type: ignore
+    SmartHomeCommandParser = None  # type: ignore
 
 try:
     import sounddevice as sd  # type: ignore
@@ -100,6 +110,23 @@ class WhisperSTT:
         return "".join(seg.text for seg in segments).strip()
 
 
+class DummySTT:
+    """Fallback STT that prompts via stdin."""
+
+    def listen(self) -> str:
+        return input("(Say something) > ")
+
+
+class VoskSTT(DummySTT):
+    """Placeholder for a Vosk-based recogniser."""
+    pass
+
+
+class ServerSTT(DummySTT):
+    """Placeholder for remote STT service."""
+    pass
+
+
 class PiperTTS:
     """Simple wrapper around piper CLI for offline TTS.
 
@@ -139,6 +166,65 @@ class PiperTTS:
             print(f"[TTS] Error during synthesis: {e}")
 
 
+class XTTS:
+    """Placeholder for Coqui XTTS engine."""
+
+    def speak(self, text: str) -> None:
+        print(f"[TTS XTTS] {text}")
+
+
+class BarkTTS:
+    """Placeholder for Suno Bark engine."""
+
+    def speak(self, text: str) -> None:
+        print(f"[TTS Bark] {text}")
+
+
+class DiffSingerTTS:
+    """Placeholder for DiffSinger engine."""
+
+    def speak(self, text: str) -> None:
+        print(f"[TTS DiffSinger] {text}")
+
+
+class ServerTTS:
+    """Placeholder for external TTS service."""
+
+    def speak(self, text: str) -> None:
+        print(f"[TTS Server] {text}")
+
+
+def select_stt():
+    """Select STT engine based on environment variable."""
+    engine = os.getenv("STT_ENGINE", "whisper").lower()
+    if engine == "whisper":
+        try:
+            return WhisperSTT()
+        except Exception:
+            return DummySTT()
+    if engine == "vosk":
+        return VoskSTT()
+    if engine == "server":
+        return ServerSTT()
+    return DummySTT()
+
+
+def select_tts():
+    """Select TTS engine based on environment variable."""
+    engine = os.getenv("TTS_ENGINE", "piper").lower()
+    if engine == "piper":
+        return PiperTTS()
+    if engine == "xtts":
+        return XTTS()
+    if engine == "bark":
+        return BarkTTS()
+    if engine == "diffsinger":
+        return DiffSingerTTS()
+    if engine == "server":
+        return ServerTTS()
+    return PiperTTS()
+
+
 def main() -> None:
     """Run a voice conversation loop with wake word, STT and TTS.
 
@@ -162,16 +248,13 @@ def main() -> None:
             ww_engine = DummyWakeWord()
     else:
         ww_engine = DummyWakeWord()
-    # Placeholder STT and TTS
-    try:
-        stt = WhisperSTT()
-    except Exception:
-        class DummySTT:
-            def listen(self) -> str:
-                return input("(Say something) > ")
+    # Select STT/TTS engines
+    stt = select_stt()
+    tts = select_tts()
 
-        stt = DummySTT()
-    tts = PiperTTS()
+    # Optional smart home helpers
+    bridge = SmartHomeBridge() if SmartHomeBridge else None
+    parser = SmartHomeCommandParser() if SmartHomeCommandParser else None
     print("Voice loop ready. Say the wake word to begin.")
     # Start wake word detection
     def on_wake():
@@ -180,12 +263,22 @@ def main() -> None:
         text = stt.listen()
         if not text:
             return
-        # Here you would call into your conversation logic, e.g. via
-        # speech_loop_stub.main(), but that function expects to run its
-        # own loop.  Instead, you could factor out the response logic
-        # into a function and call it here.  For demo we just echo.
-        reply = f"You said: {text}"
+        # Attempt smart home parsing first
+        handled = False
+        if parser and bridge:
+            cmd = parser.parse(text)
+            if cmd:
+                bridge.publish_command(cmd["device"], cmd["action"], cmd.get("value"))
+                reply = f"Okay, {cmd['action'].replace('_', ' ')} {cmd['device'].replace('_', ' ')}."
+                handled = True
+        if not handled:
+            # Here you would call into your conversation logic. For demo we just echo.
+            reply = f"You said: {text}"
+        # Send neutral PAD and mouth-open signals for basic lip-sync
+        send_pad(0.0, 0.0, 0.0)
+        send_mouth_open(1.0)
         tts.speak(reply)
+        send_mouth_open(0.0)
 
     try:
         ww_engine.start(on_wake)
