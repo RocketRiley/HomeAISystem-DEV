@@ -47,6 +47,10 @@ from pathlib import Path
 from typing import Optional
 
 from osc_bridge_stub import send_mouth_open, send_pad
+ codex/resolve-conflict-in-readme.md-ookl8l
+=======
+from log_rotation import rotate_logs_periodically
+ main
 
 try:
     from smarthome_bridge import SmartHomeBridge  # type: ignore
@@ -252,9 +256,19 @@ def main() -> None:
     stt = select_stt()
     tts = select_tts()
 
+codex/resolve-conflict-in-readme.md-ookl8l
     # Optional smart home helpers
     bridge = SmartHomeBridge() if SmartHomeBridge else None
     parser = SmartHomeCommandParser() if SmartHomeCommandParser else None
+
+    # Start periodic log rotation
+    rotate_logs_periodically()
+
+    # Optional smart home helpers
+    bridge = SmartHomeBridge() if SmartHomeBridge else None
+    parser = SmartHomeCommandParser() if SmartHomeCommandParser else None
+
+ main
     print("Voice loop ready. Say the wake word to begin.")
     # Start wake word detection
     def on_wake():
