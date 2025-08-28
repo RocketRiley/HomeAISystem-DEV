@@ -73,6 +73,18 @@ for a beginner-friendly, step-by-step manual covering Unity
 installation, importing a VRM, installing **UniVRM** and **OscJack**, attaching the
 scripts, and connecting to the Python runtime.
 
+### Standalone build
+
+To produce a bundled player with the Python runtime:
+
+1. Open the Unity project in `unity_project/`.
+2. Navigate to **File > Build Settings** and add `Assets/Scenes/Main.unity` to
+   the *Scenes In Build* list, ensuring it is checked.
+3. Run **Build > Standalone** from the Unity editor. This executes
+   `Build/StandaloneBuild.cs`, which builds the game, copies `scripts/` and
+   `assets/` into `Build/Data/`, and writes `run.bat` / `run.sh` wrappers that
+   launch the Unity player and Python side by side.
+
 ## Notes
 
 - Do **not** commit `.env`.
