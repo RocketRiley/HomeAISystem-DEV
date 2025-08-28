@@ -21,7 +21,10 @@ from ..curiosity_engine import (
     EmotionState,
     MemoryPeek,
 )
+ codex/resolve-conflict-in-readme.md-g7qctv
 from brain.dreaming import DreamManager
+=======
+main
 
 # Logs directory for dream cycles
 LOG_DIR = Path(__file__).resolve().parent.parent.parent / "logs"
@@ -51,7 +54,10 @@ class MemoryCoordinator:
         self.calendar = PersonalCalendar(CONFIG_DIR)
         self.curiosity = CuriosityEngine()
         self._last_daily_summary: Optional[str] = None
+ codex/resolve-conflict-in-readme.md-g7qctv
         self.dream = DreamManager()
+=======
+ main
 
     # Compatibility methods -------------------------------------------------
     def add_event(
@@ -115,8 +121,13 @@ class MemoryCoordinator:
         demoted = self.long.decay()
         if demoted:
             self.archive.store(demoted)
+ codex/resolve-conflict-in-readme.md-g7qctv
         # Nightly emotional hygiene
         self.dream.run_nightly(self._last_daily_summary)
+=======
+        # Enter dream cycle after consolidation
+        self.initiate_dream_cycle()
+ main
 
     # Search ---------------------------------------------------------------
     def search(self, query: str) -> List[dict]:
@@ -131,13 +142,17 @@ class MemoryCoordinator:
     def _create_daily_summary_and_schedule_events(self, packets: List[MemoryPacket]) -> None:
         """Summarize old packets and schedule any future events."""
         text_block = "\n".join(p.text for p in packets)
+ codex/resolve-conflict-in-readme.md-g7qctv
         date = datetime.utcnow().strftime("%Y-%m-%d")
+=======
+ main
         prompt = (
             "Summarize the key events, topics, and participants from the "
             "following daily log. Be concise.\n\n" + text_block
         )
         daily_summary = generate_response(prompt, history=None, human_mode=False) or ""
         self._last_daily_summary = daily_summary
+ codex/resolve-conflict-in-readme.md-g7qctv
         summary_packet = MemoryPacket.create(
             f"Daily summary {date}: {daily_summary}",
             tags=["daily_summary"],
@@ -145,6 +160,8 @@ class MemoryCoordinator:
         )
         self.long.reinforce(summary_packet)
         self.archive.store([summary_packet])
+=======
+ main
 
         event_prompt = (
             "Analyze this summary for future events, appointments, or "
@@ -191,14 +208,52 @@ class MemoryCoordinator:
         )
         self.mid.add(packet, packet.expiry)
 
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
+    def initiate_dream_cycle(self) -> None:
+        """Stage 2 of sleep: freeform reflection stored as a dream log."""
+        if not self._last_daily_summary:
+            return
+        prompt = (
+            "Using the following daily summary, drift into a silent monologue "
+            "and explore thoughts, stories, or analogies that relate to the day.\n\n"
+            f"Summary:\n{self._last_daily_summary}\n"
+            "Monologue:"
+        )
+        dream_text = generate_response(prompt, history=None, human_mode=False) or ""
+        entry = {
+            "ts": datetime.utcnow().isoformat(),
+            "dream": dream_text.strip(),
+        }
+        with open(LOG_DIR / "dream_log.jsonl", "a", encoding="utf-8") as f:
+            f.write(json.dumps(entry) + "\n")
+        self._last_daily_summary = None
+
+    def recall_last_dream(self) -> str:
+        """Return the most recent dream entry for the handler."""
+        path = LOG_DIR / "dream_log.jsonl"
+        if not path.exists():
+            return "No dreams recorded yet."
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+            if not lines:
+                return "No dreams recorded yet."
+            data = json.loads(lines[-1])
+            return data.get("dream", "No dream content.")
+        except Exception:
+            return "Error recalling dream."
+ main
 
     def purge_archive(self, age_threshold_days: int, salience_threshold: float) -> None:
         """Manually trigger purge of the archive store."""
         self.archive.purge_old_memories(age_threshold_days, salience_threshold)
-
+ codex/resolve-conflict-in-readme.md-g7qctv
     def recall_last_dream(self) -> Optional[str]:
         return self.dream.recall_last_dream()
 
+=======
+ main
     def check_proactive_events(self) -> Dict[str, List[str]]:
         """Return due reminders and follow-up questions."""
         reminders: List[str] = []
