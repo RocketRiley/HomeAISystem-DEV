@@ -41,4 +41,10 @@ def send_pad(p: float, a: float, d: float) -> None:
     c.send_message("/avatar/parameters/Fun", fun)
 
 
-__all__ = ["send_pad"]
+def send_mouth_open(amount: float) -> None:
+    """Send a simple mouth-open weight for lip-sync."""
+    c = _client()
+    if c is None:
+        return
+    c.send_message("/avatar/parameters/MouthOpen", max(0.0, min(1.0, amount)))
+__all__ = ["send_pad", "send_mouth_open"]

@@ -8,7 +8,7 @@ want full sensory interaction.
 
 1. `pip install openwakeword`
 2. Download or train a wake word model (`.tflite`).
-3. Set `WAKE_MODEL_PATH` in `.env` to the model file.
+3. Set `WAKE_WORD_MODEL` in `.env` to the model file.
 
 ## Speech-to-Text
 
@@ -20,7 +20,7 @@ want full sensory interaction.
 
 1. `pip install piper-tts`
 2. Download a Piper voice model (`.onnx`).
-3. Set `PIPER_MODEL_PATH` and `PIPER_SPEAKER` in `.env`.
+3. Set `PIPER_MODEL_PATH` and `PIPER_VOICE` in `.env`.
 
 ## Microphone Access
 

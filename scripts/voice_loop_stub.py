@@ -46,6 +46,15 @@ import time
 from pathlib import Path
 from typing import Optional
 
+from osc_bridge_stub import send_mouth_open, send_pad
+
+try:
+    from smarthome_bridge import SmartHomeBridge  # type: ignore
+    from dspy_smarthome_parser import SmartHomeCommandParser  # type: ignore
+except Exception:  # pragma: no cover - optional dependencies
+    SmartHomeBridge = None  # type: ignore
+    SmartHomeCommandParser = None  # type: ignore
+
 try:
     import sounddevice as sd  # type: ignore
 except Exception:
@@ -242,6 +251,12 @@ def main() -> None:
     # Select STT/TTS engines
     stt = select_stt()
     tts = select_tts()
+ codex/resolve-conflict-in-readme.md-5fi9ql
+
+    # Optional smart home helpers
+    bridge = SmartHomeBridge() if SmartHomeBridge else None
+    parser = SmartHomeCommandParser() if SmartHomeCommandParser else None
+ main
     print("Voice loop ready. Say the wake word to begin.")
     # Start wake word detection
     def on_wake():
@@ -250,12 +265,22 @@ def main() -> None:
         text = stt.listen()
         if not text:
             return
-        # Here you would call into your conversation logic, e.g. via
-        # speech_loop_stub.main(), but that function expects to run its
-        # own loop.  Instead, you could factor out the response logic
-        # into a function and call it here.  For demo we just echo.
-        reply = f"You said: {text}"
+        # Attempt smart home parsing first
+        handled = False
+        if parser and bridge:
+            cmd = parser.parse(text)
+            if cmd:
+                bridge.publish_command(cmd["device"], cmd["action"], cmd.get("value"))
+                reply = f"Okay, {cmd['action'].replace('_', ' ')} {cmd['device'].replace('_', ' ')}."
+                handled = True
+        if not handled:
+            # Here you would call into your conversation logic. For demo we just echo.
+            reply = f"You said: {text}"
+        # Send neutral PAD and mouth-open signals for basic lip-sync
+        send_pad(0.0, 0.0, 0.0)
+        send_mouth_open(1.0)
         tts.speak(reply)
+        send_mouth_open(0.0)
 
     try:
         ww_engine.start(on_wake)

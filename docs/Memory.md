@@ -24,3 +24,4 @@ mc.consolidate()
 
 In the example above a notable event is added and then consolidated, moving
 expired or low-salience items into the archive.
+

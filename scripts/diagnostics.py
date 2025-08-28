@@ -52,10 +52,34 @@ def check_osc() -> None:
         sock.close()
 
 
+ codex/resolve-conflict-in-readme.md-5fi9ql
+def check_mqtt() -> None:
+    host = os.getenv("MQTT_HOST")
+    port = int(os.getenv("MQTT_PORT", "1883"))
+    if not host:
+        print("MQTT_HOST not set")
+        return
+    sock = socket.socket()
+    sock.settimeout(1)
+    try:
+        sock.connect((host, port))
+        print(f"MQTT {host}:{port} reachable")
+    except OSError:
+        print(f"MQTT {host}:{port} unreachable")
+    finally:
+        sock.close()
+
+
+=======
+ main
 def main() -> None:
     show_env()
     check_paths()
     check_osc()
+ codex/resolve-conflict-in-readme.md-5fi9ql
+    check_mqtt()
+=======
+ main
 
 
 if __name__ == "__main__":
