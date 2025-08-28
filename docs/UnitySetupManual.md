@@ -7,9 +7,25 @@
 3. Drag `UI_System.prefab` into the **Hierarchy**.
 4. Assign your VRM avatar to the `Clair_Character` Animator if needed.
 5. Drop a room prefab into the scene and tag interactable objects.
+ codex/resolve-conflict-in-readme.md-esoix8
 6. In a terminal, run `python -m scripts.voice_loop_stub` so STT/TTS are
    ready.
 7. Press **Play**.
+=======
+ codex/resolve-conflict-in-readme.md-154yk5
+6. In a terminal, run `python -m scripts.voice_loop_stub` so STT/TTS are
+   ready.
+7. Press **Play**.
+=======
+ codex/resolve-conflict-in-readme.md-ookl8l
+6. In a terminal, run `python -m scripts.voice_loop_stub` so STT/TTS are
+   ready.
+7. Press **Play**.
+=======
+6. Press **Play**.
+ main
+main
+ main
 
 This guide walks through creating the Unity avatar project for Clair from scratch.
 It assumes no prior Unity experience.
@@ -60,6 +76,13 @@ OscJack lets the Python runtime drive avatar blendshapes.
    `PADReceiver.cs` exists.
 2. Select the avatar root in the **Hierarchy**.
 3. In the **Inspector** click **Add Component** -> type `PADReceiver`.
+ codex/resolve-conflict-in-readme.md-esoix8
+=======
+ codex/resolve-conflict-in-readme.md-154yk5
+=======
+ codex/resolve-conflict-in-readme.md-ookl8l
+ main
+ main
 4. Assign the avatar's `Animator` to the component's field. The receiver
    also listens for `/avatar/parameters/MouthOpen` to drive lip-sync, so
    ensure your Animator has a `MouthOpen` float parameter.
@@ -74,28 +97,75 @@ OscJack lets the Python runtime drive avatar blendshapes.
 
 ## 8. Configure the Scene
 
+ codex/resolve-conflict-in-readme.md-154yk5
+=======
+=======
+ main
+ main
+ main
+
 1. Open `Assets/Scenes/Main.unity`.
 2. Verify the avatar appears in the Scene view.
 3. Ensure there is a camera pointing at the avatar and at least one
    light source.
 
+ codex/resolve-conflict-in-readme.md-esoix8
 ## 9. Import the Room Environment
+=======
+ codex/resolve-conflict-in-readme.md-154yk5
+## 9. Import the Room Environment
+=======
+ codex/resolve-conflict-in-readme.md-ookl8l
+## 9. Import the Room Environment
+=======
+
+ main
+ main
+main
 
 1. Drag a room model (`.fbx`, `.glb`, `.obj`, `.ply`, etc.) into
    `Assets/RoomModels/`.
 2. Add the room prefab to the **Hierarchy** and place the avatar inside it.
 3. Adjust the scale and lighting as needed to match the room.
 
+ codex/resolve-conflict-in-readme.md-esoix8
 ## 10. Camera and Roaming
+=======
+ codex/resolve-conflict-in-readme.md-154yk5
+## 10. Camera and Roaming
+=======
+ codex/resolve-conflict-in-readme.md-ookl8l
+## 10. Camera and Roaming
+=======
+
+ main
+ main
+ main
 
 1. Attach `LookAtCamera.cs` to the avatar so she faces the main camera while speaking.
 2. Attach `RoamController.cs` to enable wandering; bake a NavMesh for the room.
 3. Toggle `enableRoam` in the component to let Clair walk around the room.
+ codex/resolve-conflict-in-readme.md-esoix8
+=======
+codex/resolve-conflict-in-readme.md-154yk5
+=======
+ codex/resolve-conflict-in-readme.md-ookl8l
+ main
+main
 4. Add `POIManager.cs` to an empty GameObject to gather objects tagged `Interactable`.
 5. Add `CharacterAI_Director.cs` and `IKGrounding.cs` to the avatar to choose
    actions and align feet to the ground.
 
 ## 11. Connect to the Python Runtime
+ codex/resolve-conflict-in-readme.md-esoix8
+=======
+ codex/resolve-conflict-in-readme.md-154yk5
+=======
+=======
+
+ main
+ main
+ main
 
 1. Run the Python voice loop: `python -m scripts.voice_loop_stub`.
 2. When conversations occur, the Python app sends PAD values over OSC on
@@ -103,7 +173,18 @@ OscJack lets the Python runtime drive avatar blendshapes.
 3. With the Unity scene in **Play** mode, the avatar should mirror
    Clair's emotions.
 
+ codex/resolve-conflict-in-readme.md-esoix8
 ## 12. Basic Unity Usage
+=======
+ codex/resolve-conflict-in-readme.md-154yk5
+## 12. Basic Unity Usage
+=======
+ codex/resolve-conflict-in-readme.md-ookl8l
+## 12. Basic Unity Usage
+=======
+ main
+ main
+ main
 
 - **Play Mode**: Press the Play button to run the scene; press again to
   stop.
@@ -114,7 +195,19 @@ OscJack lets the Python runtime drive avatar blendshapes.
 - **Building**: From **File -> Build Settings**, add `Scenes/Main.unity`
   and build a standalone app if desired.
 
+ codex/resolve-conflict-in-readme.md-esoix8
 ## 13. Troubleshooting
+=======
+ codex/resolve-conflict-in-readme.md-154yk5
+## 13. Troubleshooting
+=======
+ codex/resolve-conflict-in-readme.md-ookl8l
+## 13. Troubleshooting
+=======
+
+ main
+ main
+ main
 
 - If the avatar does not move, ensure the Python voice loop is running
   and `PADReceiver` shows OSC messages in the Console.
