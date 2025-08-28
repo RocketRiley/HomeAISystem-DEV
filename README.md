@@ -36,8 +36,10 @@ Local-first VTuber companion (Clair) with:
 8. Drag your avatar `.vrm` into `Assets/CharacterModels/`, your room model
    into `Assets/RoomModels/`, and open `Assets/Scenes/Main.unity`.
 9. Start the Python side: `python -m scripts.voice_loop_stub` (optional
-   settings server: `python -m scripts.settings_server`). This emits PAD
-   emotion values and a basic lip-sync signal over OSC.
+    settings server: `python -m scripts.settings_server`). This emits PAD
+    emotion values and a basic lip-sync signal over OSC. In another shell, run
+    `python -m scripts.health_monitor` to expose a `/healthz` endpoint for
+    watchdog supervision.
 10. Press **Play** in Unity; Clair faces the camera, roams if enabled, and
     responds using STT/TTS out of the box.
 
