@@ -1,50 +1,32 @@
 using UnityEngine;
-using OscJack;
 
 /// <summary>
-/// Minimal OSC listener that maps PAD values from the Python app
-/// to Animator parameters. Requires the OscJack package
-/// (https://github.com/keijiro/OscJack).
+/// Maps emotion values received from the WebSocketClient to Animator parameters.
 /// </summary>
 public class PADReceiver : MonoBehaviour
 {
     public Animator animator;
+    public WebSocketClient client;
 
-    OscServer server;
-
-    void Awake()
+    void Start()
     {
-        // Listen on port 9000 which matches scripts/osc_bridge_stub.py
-        server = new OscServer(9000);
-        var disp = server.MessageDispatcher;
-        disp.AddCallback("/avatar/parameters/Joy", OnJoy);
-        disp.AddCallback("/avatar/parameters/Angry", OnAngry);
-        disp.AddCallback("/avatar/parameters/Sorrow", OnSorrow);
-        disp.AddCallback("/avatar/parameters/Fun", OnFun);
-    }
-
-    void OnJoy(string address, OscDataHandle data)
-    {
-        animator?.SetFloat("Joy", data.GetElementAsFloat(0));
-    }
-
-    void OnAngry(string address, OscDataHandle data)
-    {
-        animator?.SetFloat("Angry", data.GetElementAsFloat(0));
-    }
-
-    void OnSorrow(string address, OscDataHandle data)
-    {
-        animator?.SetFloat("Sorrow", data.GetElementAsFloat(0));
-    }
-
-    void OnFun(string address, OscDataHandle data)
-    {
-        animator?.SetFloat("Fun", data.GetElementAsFloat(0));
+        if (client == null)
+            client = FindObjectOfType<WebSocketClient>();
+        if (client != null)
+            client.EmotionReceived += OnEmotion;
     }
 
     void OnDestroy()
     {
-        server?.Dispose();
+        if (client != null)
+            client.EmotionReceived -= OnEmotion;
+    }
+
+    void OnEmotion(WebSocketClient.EmotionMessage msg)
+    {
+        animator?.SetFloat("Joy", msg.Joy);
+        animator?.SetFloat("Angry", msg.Angry);
+        animator?.SetFloat("Sorrow", msg.Sorrow);
+        animator?.SetFloat("Fun", msg.Fun);
     }
 }
