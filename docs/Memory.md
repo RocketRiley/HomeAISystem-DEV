@@ -25,11 +25,3 @@ mc.consolidate()
 In the example above a notable event is added and then consolidated, moving
 expired or low-salience items into the archive.
 
-## Daily summarization and proactive recall
-
-During consolidation, short‑term logs older than a day are combined into a
-"daily newspaper" summary via the local LLM. If any future events are mentioned,
-they are added to the personal calendar and a mid‑term reminder is scheduled
-three days beforehand. The helper `check_proactive_events()` surfaces due
-reminders and follow‑up questions about events from the previous day so Clair
-can proactively bring them up with the user.

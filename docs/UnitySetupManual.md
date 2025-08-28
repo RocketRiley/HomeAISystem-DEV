@@ -58,42 +58,25 @@ OscJack lets the Python runtime drive avatar blendshapes.
    `PADReceiver.cs` exists.
 2. Select the avatar root in the **Hierarchy**.
 3. In the **Inspector** click **Add Component** -> type `PADReceiver`.
-4. Assign the avatar's `Animator` to the component's field. The receiver
-   also listens for `/avatar/parameters/MouthOpen` to drive lip-sync, so
-   ensure your Animator has a `MouthOpen` float parameter.
-
-## 7. Attach Expression Scripts
-
-1. Add `LipSyncBlendShape.cs` to map the `MouthOpen` animator parameter to
-   the avatar's `A` viseme.
-2. Add `EmotionBlendShape.cs` to drive facial expressions from the `Joy`,
-   `Angry`, `Sorrow`, and `Fun` animator parameters.
-3. Add `MicroMotion.cs` for subtle idle movement of the head.
-
-## 8. Configure the Scene
 
 1. Open `Assets/Scenes/Main.unity`.
 2. Verify the avatar appears in the Scene view.
 3. Ensure there is a camera pointing at the avatar and at least one
    light source.
 
-## 9. Import the Room Environment
+
 
 1. Drag a room model (`.fbx`, `.glb`, `.obj`, `.ply`, etc.) into
    `Assets/RoomModels/`.
 2. Add the room prefab to the **Hierarchy** and place the avatar inside it.
 3. Adjust the scale and lighting as needed to match the room.
 
-## 10. Camera and Roaming
+
 
 1. Attach `LookAtCamera.cs` to the avatar so she faces the main camera while speaking.
 2. Attach `RoamController.cs` to enable wandering; bake a NavMesh for the room.
 3. Toggle `enableRoam` in the component to let Clair walk around the room.
-4. Add `POIManager.cs` to an empty GameObject to gather objects tagged `Interactable`.
-5. Add `CharacterAI_Director.cs` and `IKGrounding.cs` to the avatar to choose
-   actions and align feet to the ground.
 
-## 11. Connect to the Python Runtime
 
 1. Run the Python voice loop: `python -m scripts.voice_loop_stub`.
 2. When conversations occur, the Python app sends PAD values over OSC on
@@ -101,7 +84,6 @@ OscJack lets the Python runtime drive avatar blendshapes.
 3. With the Unity scene in **Play** mode, the avatar should mirror
    Clair's emotions.
 
-## 12. Basic Unity Usage
 
 - **Play Mode**: Press the Play button to run the scene; press again to
   stop.
@@ -112,7 +94,7 @@ OscJack lets the Python runtime drive avatar blendshapes.
 - **Building**: From **File -> Build Settings**, add `Scenes/Main.unity`
   and build a standalone app if desired.
 
-## 13. Troubleshooting
+
 
 - If the avatar does not move, ensure the Python voice loop is running
   and `PADReceiver` shows OSC messages in the Console.

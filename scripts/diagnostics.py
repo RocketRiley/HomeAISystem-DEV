@@ -52,6 +52,7 @@ def check_osc() -> None:
         sock.close()
 
 
+ codex/resolve-conflict-in-readme.md-5fi9ql
 def check_mqtt() -> None:
     host = os.getenv("MQTT_HOST")
     port = int(os.getenv("MQTT_PORT", "1883"))
@@ -69,11 +70,16 @@ def check_mqtt() -> None:
         sock.close()
 
 
+=======
+ main
 def main() -> None:
     show_env()
     check_paths()
     check_osc()
+ codex/resolve-conflict-in-readme.md-5fi9ql
     check_mqtt()
+=======
+ main
 
 
 if __name__ == "__main__":
