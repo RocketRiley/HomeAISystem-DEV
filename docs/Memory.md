@@ -5,10 +5,10 @@ Clair stores conversations and events across five tiers.
 ## Tiers
 
 1. **Active** – recent utterances kept in RAM.
-2. **Short-term** – 24-hour session log at `config/short_term/<user>.json`.
-3. **Mid-term** – time-limited notes in `config/mid_term/<user>.db`.
-4. **Long-term** – curated knowledge graph at `config/long_term/<user>.json`.
-5. **Archive** – compressed backup in `config/archive/<user>.jsonl.gz`.
+2. **Short-term** – 24-hour session log at `config/short_term/{user}.json`.
+3. **Mid-term** – time-limited notes in `config/mid_term/{user}.db`.
+4. **Long-term** – curated knowledge graph at `config/long_term/{user}.json`.
+5. **Archive** – compressed backup in `config/archive/{user}.jsonl.gz`.
 
 ## Promotion and consolidation
 
