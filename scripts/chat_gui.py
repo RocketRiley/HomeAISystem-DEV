@@ -56,6 +56,11 @@ try:
 except ImportError:
     from filter_system import FilterPipeline as FilterSystem  # type: ignore
 
+try:
+    from .memory_manager import MemoryManager  # type: ignore
+except ImportError:
+    from memory_manager import MemoryManager  # type: ignore
+
 # Load environment variables from .env if present
 load_dotenv()
 
@@ -105,6 +110,12 @@ class ClairChatApp:
             from log_manager import LogManager  # type: ignore
         log_path = Path(__file__).resolve().parent.parent / "config" / "logs.jsonl"
         self.logger = LogManager(log_path)
+        # Memory manager for episodic memory
+        mem_path = Path(__file__).resolve().parent.parent / "config" / "memory.json"
+        self.memory = MemoryManager(mem_path)
+        self.memory_status = tk.StringVar()
+        status_label = tk.Label(self.root, textvariable=self.memory_status, anchor="w", font=("Arial", 8))
+        status_label.pack(padx=10, pady=(0, 5), fill=tk.X)
         # Greet the user
         self._print("Clair", "Hello! I'm ready to chat.")
 
@@ -125,6 +136,15 @@ class ClairChatApp:
             self.logger.log({"sender": sender, "text": text})
         except Exception:
             pass
+        # Store in memory and update status readout
+        try:
+            self.memory.add_event(f"{sender}: {text}", participants=[sender])
+            last = self.memory.get_last_events(1)[0]["text"]
+            if len(last) > 60:
+                last = last[:57] + "..."
+            self.memory_status.set(f"Last memory: {last}")
+        except Exception:
+            self.memory_status.set("Memory error")
 
     def _on_send(self, event: Optional[tk.Event] = None) -> None:
         user_input = self.entry_var.get().strip()

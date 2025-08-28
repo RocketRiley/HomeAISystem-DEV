@@ -56,6 +56,11 @@ try:
 except ImportError:
     WakeWordEngine = None
 
+try:
+    from .memory_manager import MemoryManager  # type: ignore
+except ImportError:
+    from memory_manager import MemoryManager  # type: ignore
+
 
 class DummyWakeWord:
     """Fallback wake word engine that never fires."""
@@ -149,6 +154,8 @@ def main() -> None:
     # Placeholder STT and TTS
     stt = DummySTT()
     tts = PiperTTS()
+    mem_path = Path(__file__).resolve().parent.parent / "config" / "memory.json"
+    memory = MemoryManager(mem_path)
     print("Voice loop ready. Say the wake word to begin.")
     # Start wake word detection
     stop_event = threading.Event()
@@ -158,12 +165,18 @@ def main() -> None:
         text = stt.listen()
         if not text:
             return
+        memory.add_event(f"User: {text}", participants=["user"])
+        last = memory.get_last_events(1)[0]["text"]
+        print(f"[Memory] Last: {last}")
         # Here you would call into your conversation logic, e.g. via
         # speech_loop_stub.main(), but that function expects to run its
         # own loop.  Instead, you could factor out the response logic
         # into a function and call it here.  For demo we just echo.
         reply = f"You said: {text}"
         tts.speak(reply)
+        memory.add_event(f"Clair: {reply}", participants=["Clair"])
+        last = memory.get_last_events(1)[0]["text"]
+        print(f"[Memory] Last: {last}")
 
     try:
         ww_engine.start(on_wake)
