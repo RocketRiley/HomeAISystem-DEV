@@ -1,0 +1,28 @@
+{
+  "prosody": {
+    "enthusiasm": {"rate": 0.08, "pitch": 0.05},
+    "melancholy": {"rate": -0.10, "pitch": -0.05, "pause_ms": 120},
+    "gravity": {"energy": -0.15}
+  },
+  "language": {
+    "caution": {"hedges": ["let's keep it safe", "I'll tread lightly"]},
+    "warmth": {"endearments": ["friend", "love"], "gate": {"trust_min": 0.6}}
+  },
+  "curiosity": {
+    "curiosity": {"min_interval_min": -20, "max_followups": 1},
+    "gravity": {"suppress_if": true}
+  },
+  "planner": {
+    "enthusiasm": {"brainstorm_weight": 0.2},
+    "gravity": {"execute_weight": 0.2},
+    "caution": {"risk_penalty": 0.3}
+  },
+  "memory": {
+    "admiration": {"salience_boost": 0.3},
+    "melancholy": {"comfort_bias": 0.2}
+  },
+  "ha": {
+    "concern": {"suggest": "cozy"},
+    "enthusiasm": {"suggest": "focus"}
+  }
+}

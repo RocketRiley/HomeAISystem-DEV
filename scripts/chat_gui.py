@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import os
 import threading
+import time
 from pathlib import Path
 from typing import Optional, List, Dict
 
@@ -58,8 +59,27 @@ try:
 except ImportError:
     from filter_system import FilterPipeline as FilterSystem  # type: ignore
 
+try:
+    from .curiosity_engine import (
+        CuriosityEngine,
+        CuriosityContext,
+        EmotionState,
+        MemoryPeek,
+    )  # type: ignore
+except ImportError:
+    from curiosity_engine import (  # type: ignore
+        CuriosityEngine,
+        CuriosityContext,
+        EmotionState,
+        MemoryPeek,
+    )
+
 # Load environment variables from .env if present
 load_dotenv()
+
+curiosity_engine = CuriosityEngine()
+_last_probe_ts = 0.0
+_probes_so_far = 0
 
 
 class ClairChatApp:
@@ -68,6 +88,7 @@ class ClairChatApp:
     def __init__(self, root: tk.Tk):
         self.root = root
         self.root.title("Clair Assistant Chat")
+        self.persona_name = os.getenv("PERSONA_NAME", "Clair")
         # Try to set a program icon if available
         logo_path = Path(__file__).resolve().parent.parent / "assets" / "logo.png"
         if Image and ImageTk and logo_path.is_file():
@@ -115,7 +136,7 @@ class ClairChatApp:
         self.history: List[Dict[str, str]] = []
         self.human_mode = os.getenv("HIDE_AI_IDENTITY", "false").lower() in {"true", "1", "yes"}
         # Greet the user
-        self._print("Clair", "Hello! I'm ready to chat.")
+        self._print(self.persona_name, "Hello! I'm ready to chat.")
 
     @property
     def filter(self) -> FilterSystem:
@@ -162,11 +183,39 @@ class ClairChatApp:
             self.history.append({"role": "assistant", "content": reply})
         if len(self.history) > 20:
             self.history = self.history[-20:]
-        self._print("Clair", reply)
+        self._print(self.persona_name, reply)
         try:
             self.memory.add_event(reply, participants=["clair"], tags=["conversation"])
         except Exception:
             pass
+
+        global _last_probe_ts, _probes_so_far
+        ctx = CuriosityContext(
+            user_text=user_input,
+            persona_name=self.persona_name,
+            mode=os.getenv("FILTER_MODE", "enabled"),
+            dlc_warm_nights=os.getenv("DLC_WARM_NIGHTS", "false").lower() in {"true", "1", "yes"},
+            emotion=EmotionState(valence=0.0, arousal=0.0, dominance=0.0, top_labels=[]),
+            memory=MemoryPeek(known_topics=[], missing_slots={}, last_followups=[]),
+            turns_since_user_question=1,
+            user_tokens_in_last_turn=len(user_input.split()),
+            now_ts=time.time(),
+            last_probe_ts=_last_probe_ts,
+            probes_so_far=_probes_so_far,
+            persona_constraints={"no_ai_self_ref": True, "style": "warm-casual"},
+            safety_filter_level=os.getenv("FILTER_MODE", "enabled"),
+            user_led_adult_topic=False,
+            active_goal=None,
+        )
+        followup = curiosity_engine.maybe_ask(ctx)
+        if followup:
+            self._print(self.persona_name, followup)
+            try:
+                self.memory.add_event(followup, participants=["clair"], tags=["curiosity"])
+            except Exception:
+                pass
+            _last_probe_ts = ctx.now_ts
+            _probes_so_far += 1
 
 
 def main() -> None:
