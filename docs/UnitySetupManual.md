@@ -7,6 +7,11 @@
 3. Drag `UI_System.prefab` into the **Hierarchy**.
 4. Assign your VRM avatar to the `Clair_Character` Animator if needed.
 5. Drop a room prefab into the scene and tag interactable objects.
+ codex/resolve-conflict-in-readme.md-g7qctv
+6. In a terminal, run `python -m scripts.voice_loop_stub` so STT/TTS are
+   ready.
+7. Press **Play**.
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 6. In a terminal, run `python -m scripts.voice_loop_stub` so STT/TTS are
    ready.
@@ -25,6 +30,7 @@
 6. Press **Play**.
  main
 main
+ main
  main
 
 This guide walks through creating the Unity avatar project for Clair from scratch.
@@ -76,11 +82,14 @@ OscJack lets the Python runtime drive avatar blendshapes.
    `PADReceiver.cs` exists.
 2. Select the avatar root in the **Hierarchy**.
 3. In the **Inspector** click **Add Component** -> type `PADReceiver`.
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
  codex/resolve-conflict-in-readme.md-154yk5
 =======
  codex/resolve-conflict-in-readme.md-ookl8l
+ main
  main
  main
 4. Assign the avatar's `Animator` to the component's field. The receiver
@@ -96,10 +105,13 @@ OscJack lets the Python runtime drive avatar blendshapes.
 3. Add `MicroMotion.cs` for subtle idle movement of the head.
 
 ## 8. Configure the Scene
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
 
  codex/resolve-conflict-in-readme.md-154yk5
 =======
 =======
+ main
  main
  main
  main
@@ -109,6 +121,9 @@ OscJack lets the Python runtime drive avatar blendshapes.
 3. Ensure there is a camera pointing at the avatar and at least one
    light source.
 
+ codex/resolve-conflict-in-readme.md-g7qctv
+## 9. Import the Room Environment
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 ## 9. Import the Room Environment
 =======
@@ -122,12 +137,16 @@ OscJack lets the Python runtime drive avatar blendshapes.
  main
  main
 main
+ main
 
 1. Drag a room model (`.fbx`, `.glb`, `.obj`, `.ply`, etc.) into
    `Assets/RoomModels/`.
 2. Add the room prefab to the **Hierarchy** and place the avatar inside it.
 3. Adjust the scale and lighting as needed to match the room.
 
+ codex/resolve-conflict-in-readme.md-g7qctv
+## 10. Camera and Roaming
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 ## 10. Camera and Roaming
 =======
@@ -138,6 +157,7 @@ main
 ## 10. Camera and Roaming
 =======
 
+ main
  main
  main
  main
@@ -145,6 +165,8 @@ main
 1. Attach `LookAtCamera.cs` to the avatar so she faces the main camera while speaking.
 2. Attach `RoamController.cs` to enable wandering; bake a NavMesh for the room.
 3. Toggle `enableRoam` in the component to let Clair walk around the room.
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
 codex/resolve-conflict-in-readme.md-154yk5
@@ -152,17 +174,21 @@ codex/resolve-conflict-in-readme.md-154yk5
  codex/resolve-conflict-in-readme.md-ookl8l
  main
 main
+ main
 4. Add `POIManager.cs` to an empty GameObject to gather objects tagged `Interactable`.
 5. Add `CharacterAI_Director.cs` and `IKGrounding.cs` to the avatar to choose
    actions and align feet to the ground.
 
 ## 11. Connect to the Python Runtime
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
  codex/resolve-conflict-in-readme.md-154yk5
 =======
 =======
 
+ main
  main
  main
  main
@@ -173,6 +199,9 @@ main
 3. With the Unity scene in **Play** mode, the avatar should mirror
    Clair's emotions.
 
+ codex/resolve-conflict-in-readme.md-g7qctv
+## 12. Basic Unity Usage
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 ## 12. Basic Unity Usage
 =======
@@ -182,6 +211,7 @@ main
  codex/resolve-conflict-in-readme.md-ookl8l
 ## 12. Basic Unity Usage
 =======
+ main
  main
  main
  main
@@ -195,6 +225,9 @@ main
 - **Building**: From **File -> Build Settings**, add `Scenes/Main.unity`
   and build a standalone app if desired.
 
+ codex/resolve-conflict-in-readme.md-g7qctv
+## 13. Troubleshooting
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 ## 13. Troubleshooting
 =======
@@ -205,6 +238,7 @@ main
 ## 13. Troubleshooting
 =======
 
+ main
  main
  main
  main

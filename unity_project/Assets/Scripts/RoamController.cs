@@ -2,8 +2,11 @@ using UnityEngine;
 using UnityEngine.AI;
 
 /// <summary>
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
+ main
  main
  main
 /// Basic wandering behaviour inside a rectangular area.
@@ -12,6 +15,8 @@ using UnityEngine.AI;
 public class RoamController : MonoBehaviour
 {
     public bool enableRoam = false;
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
 
@@ -27,10 +32,15 @@ public class RoamController : MonoBehaviour
  main
  main
  main
+ main
     public Vector3 areaCenter = Vector3.zero;
     public Vector3 areaSize = new Vector3(4f, 0f, 4f);
     public float waitTime = 5f;
 
+ codex/resolve-conflict-in-readme.md-g7qctv
+    NavMeshAgent agent;
+    float timer;
+=======
  codex/resolve-conflict-in-readme.md-esoix8
     NavMeshAgent agent;
     float timer;
@@ -56,10 +66,13 @@ codex/resolve-conflict-in-readme.md-154yk5
  main
  main
  main
+ main
 
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
  codex/resolve-conflict-in-readme.md-154yk5
@@ -70,14 +83,18 @@ codex/resolve-conflict-in-readme.md-ookl8l
  main
  main
  main
+ main
         timer = waitTime;
     }
 
     void Update()
     {
         if (!enableRoam || agent == null) return;
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
+ main
  main
  main
         timer += Time.deltaTime;
@@ -86,6 +103,8 @@ codex/resolve-conflict-in-readme.md-ookl8l
         {
             var half = areaSize * 0.5f;
             var randomPoint = new Vector3(
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
  codex/resolve-conflict-in-readme.md-154yk5
@@ -141,12 +160,16 @@ codex/resolve-conflict-in-readme.md-ookl8l
  main
  main
  main
+ main
                 Random.Range(areaCenter.x - half.x, areaCenter.x + half.x),
                 transform.position.y,
                 Random.Range(areaCenter.z - half.z, areaCenter.z + half.z)
             );
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
+ main
  main
  main
             if (NavMesh.SamplePosition(randomPoint, out var hit, 1f, NavMesh.AllAreas))
@@ -155,6 +178,8 @@ codex/resolve-conflict-in-readme.md-ookl8l
                 timer = 0f;
             }
         }
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
 
@@ -225,6 +250,7 @@ codex/resolve-conflict-in-readme.md-ookl8l
             case "Desk": return 3;
             default: return 0;
         }
+ main
  main
  main
  main

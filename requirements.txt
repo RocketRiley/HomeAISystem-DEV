@@ -21,6 +21,10 @@ llama-cpp-python>=0.2.0
 openai>=1.0.0  # required only for online mode; safe to omit if running offline
 # Experimental learning framework
 dspy>=3.0.2
+codex/resolve-conflict-in-readme.md-g7qctv
+# Build utility for creating standalone installer
+pyinstaller>=6.0
+=======
 codex/resolve-conflict-in-readme.md-esoix8
 # Build utility for creating standalone installer
 pyinstaller>=6.0
@@ -33,6 +37,7 @@ pyinstaller>=6.0
 # Build utility for creating standalone installer
 pyinstaller>=6.0
 =======
+ main
  main
  main
  main

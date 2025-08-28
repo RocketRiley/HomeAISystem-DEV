@@ -1,6 +1,9 @@
 # External Framework Setup
 
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
 
+ main
 This project requires audio (voice) components and optionally uses
 vision components. The quickest way to set them up is to run the
 bootstrap script:
@@ -18,6 +21,8 @@ bash scripts/setup.sh
 which installs Python dependencies, downloads sample models, and
 creates the `.env` file. Manual steps are listed below if you prefer
 fine-grained control.
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
 =======
@@ -35,6 +40,7 @@ Manual steps are listed below if you prefer fine-grained control.
 This project uses optional audio/vision and voice components.
 Install the following tools before running the voice loop if you
 want full sensory interaction.
+ main
  main
  main
  main
@@ -80,6 +86,8 @@ want full sensory interaction.
 6. Configure an OSC receiver to accept PAD values on port `9000`.
 7. Press Play; the Python side will drive emotions via OSC.
 
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
  codex/resolve-conflict-in-readme.md-154yk5
@@ -87,6 +95,7 @@ want full sensory interaction.
  codex/resolve-conflict-in-readme.md-ookl8l
 =======
 
+ main
  main
  main
  main
@@ -96,6 +105,8 @@ want full sensory interaction.
 2. Set `DSPY_MODEL` in `.env` (e.g., `gpt-3.5-turbo`).
 3. Run `python -m scripts.dspy_learning` to generate routine plans.
 
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
  codex/resolve-conflict-in-readme.md-154yk5
@@ -103,10 +114,13 @@ want full sensory interaction.
  codex/resolve-conflict-in-readme.md-ookl8l
  main
  main
+ main
 ## Optional Build Tools
 
 1. `pip install pyinstaller`
 2. Run `python scripts/build_installer.py` to create `HomeAISetup.exe`.
+ codex/resolve-conflict-in-readme.md-g7qctv
+=======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
  codex/resolve-conflict-in-readme.md-154yk5
@@ -114,4 +128,5 @@ want full sensory interaction.
 =======
  main
 main
+ main
  main
