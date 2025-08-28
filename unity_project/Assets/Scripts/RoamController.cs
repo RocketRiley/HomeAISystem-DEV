@@ -2,14 +2,14 @@ using UnityEngine;
 using UnityEngine.AI;
 
 /// <summary>
-codex/resolve-conflict-in-readme.md-ookl8l
+ main
 /// Basic wandering behaviour inside a rectangular area.
 /// Requires a NavMeshAgent and a baked NavMesh in the scene.
 /// </summary>
 public class RoamController : MonoBehaviour
 {
     public bool enableRoam = false;
-=======
+
 /// Basic wandering behaviour inside a rectangular area and simple interaction
 /// with tagged targets.  The controller updates an <see cref="Animator"/> based
 /// on the agent's movement speed and the type of target reached.
@@ -20,10 +20,15 @@ public class RoamController : MonoBehaviour
     public bool enableRoam = false;
     public bool useRoamBounds = true;
  main
+ main
     public Vector3 areaCenter = Vector3.zero;
     public Vector3 areaSize = new Vector3(4f, 0f, 4f);
     public float waitTime = 5f;
 
+codex/resolve-conflict-in-readme.md-154yk5
+    NavMeshAgent agent;
+    float timer;
+=======
  codex/resolve-conflict-in-readme.md-ookl8l
     NavMeshAgent agent;
     float timer;
@@ -39,13 +44,17 @@ public class RoamController : MonoBehaviour
     float timer;
     string currentTargetTag;
  main
+ main
 
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+ codex/resolve-conflict-in-readme.md-154yk5
+=======
 codex/resolve-conflict-in-readme.md-ookl8l
 =======
         if (animator == null) animator = GetComponent<Animator>();
+ main
  main
         timer = waitTime;
     }
@@ -53,13 +62,15 @@ codex/resolve-conflict-in-readme.md-ookl8l
     void Update()
     {
         if (!enableRoam || agent == null) return;
- codex/resolve-conflict-in-readme.md-ookl8l
+ main
         timer += Time.deltaTime;
         if (timer < waitTime) return;
         if (!agent.pathPending && agent.remainingDistance < 0.2f)
         {
             var half = areaSize * 0.5f;
             var randomPoint = new Vector3(
+ codex/resolve-conflict-in-readme.md-154yk5
+=======
 
 
         timer += Time.deltaTime;
@@ -109,18 +120,19 @@ codex/resolve-conflict-in-readme.md-ookl8l
             var half = areaSize * 0.5f;
             randomPoint = new Vector3(
  main
+ main
                 Random.Range(areaCenter.x - half.x, areaCenter.x + half.x),
                 transform.position.y,
                 Random.Range(areaCenter.z - half.z, areaCenter.z + half.z)
             );
- codex/resolve-conflict-in-readme.md-ookl8l
+ main
             if (NavMesh.SamplePosition(randomPoint, out var hit, 1f, NavMesh.AllAreas))
             {
                 agent.SetDestination(hit.position);
                 timer = 0f;
             }
         }
-=======
+
         }
         else
         {
@@ -188,6 +200,7 @@ codex/resolve-conflict-in-readme.md-ookl8l
             case "Desk": return 3;
             default: return 0;
         }
+ main
  main
     }
 }

@@ -52,9 +52,12 @@ def check_osc() -> None:
         sock.close()
 
 
+ codex/resolve-conflict-in-readme.md-154yk5
+=======
  codex/resolve-conflict-in-readme.md-ookl8l
 =======
  codex/resolve-conflict-in-readme.md-5fi9ql
+ main
  main
 def check_mqtt() -> None:
     host = os.getenv("MQTT_HOST")
@@ -73,21 +76,28 @@ def check_mqtt() -> None:
         sock.close()
 
 
+ codex/resolve-conflict-in-readme.md-154yk5
+=======
  codex/resolve-conflict-in-readme.md-ookl8l
 =======
 =======
+ main
  main
  main
 def main() -> None:
     show_env()
     check_paths()
     check_osc()
+ codex/resolve-conflict-in-readme.md-154yk5
+    check_mqtt()
+=======
  codex/resolve-conflict-in-readme.md-ookl8l
     check_mqtt()
 =======
  codex/resolve-conflict-in-readme.md-5fi9ql
     check_mqtt()
 =======
+ main
  main
  main
 
