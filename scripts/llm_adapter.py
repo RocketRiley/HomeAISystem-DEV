@@ -63,7 +63,8 @@ def generate_response(
     top_p = style.get("top_p", 0.95) if style else 0.95
 
     llama_path = os.getenv("LLAMA_MODEL_PATH")
-    max_tokens_local = int(os.getenv("LLAMA_MAX_TOKENS", "2048"))
+    max_tokens_local = int(os.getenv("LLAMA_MAX_TOKENS", "512"))
+    cont = os.getenv("LLM_CONTINUE_ON_TRUNCATION", "true").lower() in {"1", "true", "yes"}
     if llama_path and llama_cpp is not None:
         global _LLAMMA_MODEL  # type: ignore
         try:
@@ -80,15 +81,28 @@ def generate_response(
             prompt_tokens = len(_LLAMMA_MODEL.tokenize(prompt_text.encode()))  # type: ignore
             available = n_ctx - prompt_tokens - 8
             max_tokens_local = min(max_tokens_local, max(0, available))
-            result = _LLAMMA_MODEL.create_chat_completion(  # type: ignore
-                messages=messages,
-                max_tokens=max_tokens_local,
-                temperature=temp,
-                top_p=top_p,
-            )
-            reply = result["choices"][0]["message"]["content"].strip()
-            finish = result["choices"][0].get("finish_reason")
-            _verbose_log(f"llama finish_reason={finish}")
+            reply_parts = []
+            while True:
+                result = _LLAMMA_MODEL.create_chat_completion(  # type: ignore
+                    messages=messages,
+                    max_tokens=max_tokens_local,
+                    temperature=temp,
+                    top_p=top_p,
+                    stop=["<|im_end|>"],
+                )
+                part = result["choices"][0]["message"]["content"].strip()
+                finish = result["choices"][0].get("finish_reason")
+                _verbose_log(f"llama finish_reason={finish}")
+                reply_parts.append(part)
+                if finish != "length" or not cont:
+                    break
+                messages.append({"role": "assistant", "content": part})
+                messages.append({"role": "user", "content": ""})
+                prompt_text = "".join(m["content"] for m in messages)
+                prompt_tokens = len(_LLAMMA_MODEL.tokenize(prompt_text.encode()))  # type: ignore
+                available = n_ctx - prompt_tokens - 8
+                max_tokens_local = min(int(os.getenv("LLAMA_MAX_TOKENS", "512")), max(0, available))
+            reply = " ".join(reply_parts).strip()
         except Exception:
             return None
     else:
@@ -104,9 +118,10 @@ def generate_response(
             openai.api_key = api_key  # type: ignore
             client = None  # type: ignore
         model_name = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
-        max_tokens_online = int(os.getenv("OPENAI_MAX_TOKENS", "2048"))
+        max_tokens_online = int(os.getenv("OPENAI_MAX_TOKENS", "512"))
         n_ctx_online = int(os.getenv("OPENAI_N_CTX", "8192"))
         prompt_text = "".join(m["content"] for m in messages)
+        cont = os.getenv("LLM_CONTINUE_ON_TRUNCATION", "true").lower() in {"1", "true", "yes"}
         if tiktoken is not None:
             try:
                 enc = tiktoken.encoding_for_model(model_name)
@@ -118,27 +133,48 @@ def generate_response(
         available = n_ctx_online - prompt_tokens - 8
         max_tokens_online = min(max_tokens_online, max(0, available))
         try:
-            if client:
-                chat = client.chat.completions.create(
-                    model=model_name,
-                    messages=messages,
-                    max_tokens=max_tokens_online,
-                    temperature=temp,
-                    top_p=top_p,
-                )
-                finish = chat.choices[0].finish_reason
-                reply = chat.choices[0].message.content.strip()
-            else:
-                response = openai.ChatCompletion.create(  # type: ignore
-                    model=model_name,
-                    messages=messages,
-                    max_tokens=max_tokens_online,
-                    temperature=temp,
-                    top_p=top_p,
-                )
-                finish = response.choices[0].finish_reason
-                reply = response.choices[0].message.content.strip()
-            _verbose_log(f"openai finish_reason={finish}")
+            reply_parts = []
+            while True:
+                if client:
+                    chat = client.chat.completions.create(
+                        model=model_name,
+                        messages=messages,
+                        max_tokens=max_tokens_online,
+                        temperature=temp,
+                        top_p=top_p,
+                        stop=["<|im_end|>"],
+                    )
+                    finish = chat.choices[0].finish_reason
+                    part = chat.choices[0].message.content.strip()
+                else:
+                    response = openai.ChatCompletion.create(  # type: ignore
+                        model=model_name,
+                        messages=messages,
+                        max_tokens=max_tokens_online,
+                        temperature=temp,
+                        top_p=top_p,
+                        stop=["<|im_end|>"],
+                    )
+                    finish = response.choices[0].finish_reason
+                    part = response.choices[0].message.content.strip()
+                _verbose_log(f"openai finish_reason={finish}")
+                reply_parts.append(part)
+                if finish != "length" or not cont:
+                    break
+                messages.append({"role": "assistant", "content": part})
+                messages.append({"role": "user", "content": ""})
+                prompt_text = "".join(m["content"] for m in messages)
+                if tiktoken is not None:
+                    try:
+                        enc = tiktoken.encoding_for_model(model_name)
+                        prompt_tokens = len(enc.encode(prompt_text))
+                    except Exception:
+                        prompt_tokens = len(prompt_text.split())
+                else:
+                    prompt_tokens = len(prompt_text.split())
+                available = n_ctx_online - prompt_tokens - 8
+                max_tokens_online = min(int(os.getenv("OPENAI_MAX_TOKENS", "512")), max(0, available))
+            reply = " ".join(reply_parts).strip()
         except Exception:
             return None
 
