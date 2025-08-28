@@ -21,6 +21,20 @@ def _ensure_env(env_example: pathlib.Path, env_path: pathlib.Path) -> None:
         print(f"[env] created {env_path} from example")
 
 
+def _ensure_unity_dirs(root: pathlib.Path) -> None:
+    """Create Unity asset placeholders so the project opens cleanly."""
+    assets = root / "unity_project" / "Assets"
+    for name, message in {
+        "CharacterModels": "Drop VRM avatar files here.\n",
+        "RoomModels": "Drop room prefabs or models here.\n",
+    }.items():
+        target = assets / name
+        target.mkdir(parents=True, exist_ok=True)
+        readme = target / "README.md"
+        if not readme.exists():
+            readme.write_text(message, encoding="utf-8")
+
+
 def main() -> None:
     root = pathlib.Path(__file__).resolve().parents[1]
     req = root / "requirements.txt"
@@ -31,6 +45,7 @@ def main() -> None:
         _pip_install(req)
 
     _ensure_env(env_example, env_path)
+    _ensure_unity_dirs(root)
 
     try:
         from . import bootstrap_models

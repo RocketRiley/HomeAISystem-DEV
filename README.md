@@ -28,7 +28,7 @@ Local-first VTuber companion (Clair) with:
    ```
 
 3. Run `python -m scripts.preinstall` to install Python dependencies,
-   download sample models, and create `.env` if missing.
+   download sample models, create `.env`, and set up Unity asset folders.
 4. Review `.env` and fill in any paths or keys.
 5. Open `unity_project/` in **Unity Hub** (Unity 2022 LTS).
 6. Via *Package Manager* install **UniVRM** and **OscJack**.
