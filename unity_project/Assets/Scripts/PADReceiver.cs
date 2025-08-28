@@ -14,6 +14,7 @@ public class PADReceiver : MonoBehaviour
 
     void Awake()
     {
+        if (animator == null) animator = GetComponent<Animator>();
         // Listen on port 9000 which matches scripts/osc_bridge_stub.py
         server = new OscServer(9000);
         var disp = server.MessageDispatcher;
@@ -21,6 +22,7 @@ public class PADReceiver : MonoBehaviour
         disp.AddCallback("/avatar/parameters/Angry", OnAngry);
         disp.AddCallback("/avatar/parameters/Sorrow", OnSorrow);
         disp.AddCallback("/avatar/parameters/Fun", OnFun);
+        disp.AddCallback("/avatar/parameters/MouthOpen", OnMouthOpen);
     }
 
     void OnJoy(string address, OscDataHandle data)
@@ -41,6 +43,11 @@ public class PADReceiver : MonoBehaviour
     void OnFun(string address, OscDataHandle data)
     {
         animator?.SetFloat("Fun", data.GetElementAsFloat(0));
+    }
+
+    void OnMouthOpen(string address, OscDataHandle data)
+    {
+        animator?.SetFloat("MouthOpen", data.GetElementAsFloat(0));
     }
 
     void OnDestroy()

@@ -1,0 +1,14 @@
+{
+  "dreams": {
+    "enabled": true,
+    "max_minutes": 6,
+    "max_tokens": 1500,
+    "store_full": false,
+    "share_morning_one_liner": true
+  },
+  "hygiene": {
+    "user": {"offer_min_interval_minutes": 60},
+    "ai": {"self_check_interval_minutes": 10},
+    "allow_home_actions": false
+  }
+}
