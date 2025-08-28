@@ -1,0 +1,14 @@
+{
+  "llm": {
+    "url": "https://example.com/capybara-gguf-placeholder.bin",
+    "path": "LLM-BASE/capybara-gguf-placeholder.bin"
+  },
+  "stt": {
+    "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin",
+    "path": "voice/ggml-small.bin"
+  },
+  "tts": {
+    "url": "https://github.com/rhasspy/piper/releases/download/v0.12.0/en_US-amy-medium.onnx",
+    "path": "voice/en_US-amy-medium.onnx"
+  }
+}

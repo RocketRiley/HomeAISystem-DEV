@@ -1,0 +1,7 @@
+{
+  "proactive_control_allowed": [
+    "living_room_lamp",
+    "office_speaker",
+    "thermostat"
+  ]
+}
