@@ -47,7 +47,13 @@ details.
 For smart home integration instructions see
 [`docs/SmartHome_Setup.md`](docs/SmartHome_Setup.md).
 
+### Log rotation
 
+The assistant writes JSONL logs under `logs/`. `scripts/log_rotation.py` runs in
+the background (started by `scripts.voice_loop_stub`) and rotates `stt.jsonl`,
+`llm.jsonl` and similar files once per day or when they exceed a configurable
+size. Archived logs are compressed and removed after 30 days by default.
+Adjust `LOG_ROTATION_SIZE_MB` and `LOG_RETENTION_DAYS` to tweak these settings.
 
 ### Environment configuration
 
