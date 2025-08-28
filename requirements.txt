@@ -11,3 +11,8 @@ python-dotenv>=0.21.0
 # Open‑source LLM support (requires a local .gguf model)
 llama-cpp-python>=0.2.0
 openai>=1.0.0  # required only for online mode; safe to omit if running offline
+
+# Optional vision and audio integrations
+opencv-python>=4.8.0
+sounddevice>=0.4.5
+SpeechRecognition>=3.10.0

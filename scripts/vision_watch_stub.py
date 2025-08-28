@@ -1,34 +1,62 @@
 #!/usr/bin/env python3
-"""Simulated vision watcher for Clair.
+"""Vision watcher for Clair.
 
-This stub pretends to monitor a TV or display visible in the camera
-feed.  It periodically prints a message indicating that a show or
-video has been detected.  In a real system, you would integrate
-computer vision or OCR here to understand what is on screen and
-trigger appropriate behaviour.  Use this as a starting point for
-developing your own vision integration.
+Capture frames from the default camera using OpenCV and perform basic
+scene change and face detection.  This is intentionally lightweight and
+serves as a starting point for integrating richer computer-vision logic.
+
+Set ``VISION_WATCH_ENABLED=false`` in the ``.env`` file to disable this
+feature.
 """
 
-import random
+import os
 import time
+from dotenv import load_dotenv
 
-def main():
-    shows = [
-        "Nature documentary",
-        "Science show",
-        "Cooking demonstration",
-        "Historical film",
-        "Space exploration stream",
-        "Robotics competition"
-    ]
-    print("Starting simulated vision watcher. Press Ctrl+C to stop.")
+
+def main() -> None:
+    load_dotenv()
+    if os.getenv("VISION_WATCH_ENABLED", "true").lower() != "true":
+        print("Vision watcher is disabled via environment variable.")
+        return
+
+    import cv2
+    import numpy as np
+
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("Vision: Could not open camera.")
+        return
+
+    face_cascade = cv2.CascadeClassifier(
+        cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    )
+    prev_gray: np.ndarray | None = None
+
+    print("Vision watcher started. Press Ctrl+C to stop.")
     try:
         while True:
-            show = random.choice(shows)
-            print(f"Vision: Detected a TV show on screen → {show}")
-            print("You might want to comment or summarize this for the user.\n")
-            time.sleep(10)
+            ret, frame = cap.read()
+            if not ret:
+                print("Vision: Failed to grab frame.")
+                break
+
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+            if len(faces) > 0:
+                print(f"Vision: Detected {len(faces)} face(s).")
+            elif prev_gray is not None:
+                diff = cv2.absdiff(prev_gray, gray)
+                if diff.mean() > 10:
+                    print("Vision: Scene changed.")
+            prev_gray = gray
+
+            time.sleep(0.5)
     except KeyboardInterrupt:
+        pass
+    finally:
+        cap.release()
+        cv2.destroyAllWindows()
         print("Vision watcher stopped.")
 
 
