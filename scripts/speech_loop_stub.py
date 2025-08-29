@@ -646,10 +646,7 @@ def main() -> None:
         active_emotions = update_emotions(active_emotions, user_input)
         # Compute PAD from active emotions
         pad = pad_from_emotions(active_emotions, emo_defs)
-        try:
-            send_pad(pad["P"], pad["A"], pad["D"])
-        except Exception:
-            pass
+
         # Apply contact feelings adjustment (bias mood by relationship)
         current_contact_id = "riley"  # in this demo we assume the user is Riley
         contact = contact_manager.get(current_contact_id)
@@ -663,6 +660,16 @@ def main() -> None:
             pad["P"] = max(-1.0, min(1.0, pad["P"] + 0.15 * cP))
             pad["A"] = max(-1.0, min(1.0, pad["A"] + 0.15 * cA))
             pad["D"] = max(-1.0, min(1.0, pad["D"] + 0.15 * cD))
+
+        # Clamp PAD to everyday conversational intensity
+        for key in ("P", "A", "D"):
+            pad[key] = max(-0.6, min(0.6, pad[key]))
+
+        try:
+            send_pad(pad["P"], pad["A"], pad["D"])
+        except Exception:
+            pass
+
         # Select a response state
         response_state = choose_state_from_pad(pad)
         style = style_from_pad(pad)

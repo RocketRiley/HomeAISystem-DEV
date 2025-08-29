@@ -16,12 +16,24 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Any
 import json
 
+PAD_LIMIT = 0.6
+
 
 @dataclass
 class PAD:
     pleasure: float
     arousal: float
     dominance: float
+
+
+def clamp_pad(pad: PAD, limit: float = PAD_LIMIT) -> PAD:
+    """Clamp PAD components to ``±limit`` and return a new instance."""
+
+    return PAD(
+        pleasure=max(-limit, min(limit, pad.pleasure)),
+        arousal=max(-limit, min(limit, pad.arousal)),
+        dominance=max(-limit, min(limit, pad.dominance)),
+    )
 
 
 class EmotionOrchestrator:
@@ -81,6 +93,8 @@ class EmotionOrchestrator:
         ``0..1`` for downstream consumers.
         """
 
+        pad = clamp_pad(pad)
+
         def clamp(v: float) -> float:
             return max(0.0, min(1.0, v))
 
@@ -106,9 +120,16 @@ class EmotionOrchestrator:
         matching affects are summed, scaled by the affect's weight.
         """
 
+        pad = clamp_pad(pad)
+
         result: Dict[str, Any] = {
             "bundle": bundle,
             "stance": stance,
+            "pad": {
+                "pleasure": pad.pleasure,
+                "arousal": pad.arousal,
+                "dominance": pad.dominance,
+            },
         }
 
         for domain, mapping in self.effects_cfg.items():

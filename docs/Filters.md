@@ -12,6 +12,7 @@ Clair ships with a word-replacement filter pipeline.
 
 The replacement tables for each level live in `scripts/filter_system.py`.
 
+
 ## Optional Sentiment Model
 
 For deployments that require additional emotional safeguards, an optional
@@ -21,3 +22,11 @@ which is released under the permissive MIT license.  When installed the
 classifier maps text to positive or negative scores and nudges the agent's
 valence accordingly.  This optional component is intended to help meet
 content guidelines for North American markets.
+=======
+## Conversational Tone Limits
+
+During dialogue the emotion orchestrator clamps valence, arousal and
+dominance to ±0.6.  Downstream speech and animation systems reference the
+clamped values so Clair's vocal delivery and facial expressions remain
+within everyday intensity.
+ main
