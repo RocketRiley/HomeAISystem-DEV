@@ -7,6 +7,7 @@ import re
 from typing import Dict, List, Optional
 
 from .prompt_manager import build_messages
+from .dialogue_regulator import normalize_reply
 
 try:  # pragma: no cover - optional
     import openai
@@ -54,6 +55,7 @@ def generate_response(
     tool_results: Optional[str] = None,
     human_mode: bool = True,
     style: Optional[Dict[str, float]] = None,
+    emotion: Optional[Dict[str, float]] = None,
 ) -> Optional[str]:
     """Generate a reply to the user's input using a local or online LLM."""
     messages = build_messages(
@@ -182,7 +184,7 @@ def generate_response(
         reply = _strip_ai_mentions(reply)
     if style and style.get("interjection"):
         reply = f"{style['interjection']} {reply}".strip()
-    return reply
+    return normalize_reply(reply, emotion or {})
 
 
 __all__ = ["generate_response"]
