@@ -21,10 +21,15 @@ from ..curiosity_engine import (
     EmotionState,
     MemoryPeek,
 )
+ codex/resolve-conflict-in-readme.md-74x7dq
+from brain.dreaming import DreamManager
+from ..filter_system import FilterPipeline
+=======
  codex/resolve-conflict-in-readme.md-g7qctv
 from brain.dreaming import DreamManager
 =======
 main
+ main
 
 # Logs directory for dream cycles
 LOG_DIR = Path(__file__).resolve().parent.parent.parent / "logs"
@@ -53,10 +58,16 @@ class MemoryCoordinator:
         self.archive = ArchiveMemory(CONFIG_DIR / "archive" / f"{user_id}.jsonl.gz")
         self.calendar = PersonalCalendar(CONFIG_DIR)
         self.curiosity = CuriosityEngine()
+ codex/resolve-conflict-in-readme.md-74x7dq
+        self.filter = FilterPipeline(os.getenv("FILTER_LEVEL", "enabled"))
+        self._last_daily_summary: Optional[str] = None
+        self.dream = DreamManager()
+=======
         self._last_daily_summary: Optional[str] = None
  codex/resolve-conflict-in-readme.md-g7qctv
         self.dream = DreamManager()
 =======
+ main
  main
 
     # Compatibility methods -------------------------------------------------
@@ -121,12 +132,17 @@ class MemoryCoordinator:
         demoted = self.long.decay()
         if demoted:
             self.archive.store(demoted)
+ codex/resolve-conflict-in-readme.md-74x7dq
+        # Nightly emotional hygiene
+        self.dream.run_nightly(self._last_daily_summary)
+=======
  codex/resolve-conflict-in-readme.md-g7qctv
         # Nightly emotional hygiene
         self.dream.run_nightly(self._last_daily_summary)
 =======
         # Enter dream cycle after consolidation
         self.initiate_dream_cycle()
+ main
  main
 
     # Search ---------------------------------------------------------------
@@ -142,17 +158,26 @@ class MemoryCoordinator:
     def _create_daily_summary_and_schedule_events(self, packets: List[MemoryPacket]) -> None:
         """Summarize old packets and schedule any future events."""
         text_block = "\n".join(p.text for p in packets)
+ codex/resolve-conflict-in-readme.md-74x7dq
+        date = datetime.utcnow().strftime("%Y-%m-%d")
+=======
  codex/resolve-conflict-in-readme.md-g7qctv
         date = datetime.utcnow().strftime("%Y-%m-%d")
 =======
+ main
  main
         prompt = (
             "Summarize the key events, topics, and participants from the "
             "following daily log. Be concise.\n\n" + text_block
         )
         daily_summary = generate_response(prompt, history=None, human_mode=False) or ""
+ codex/resolve-conflict-in-readme.md-74x7dq
+        daily_summary = self.filter.filter_text(daily_summary)
+        self._last_daily_summary = daily_summary
+=======
         self._last_daily_summary = daily_summary
  codex/resolve-conflict-in-readme.md-g7qctv
+ main
         summary_packet = MemoryPacket.create(
             f"Daily summary {date}: {daily_summary}",
             tags=["daily_summary"],
@@ -160,7 +185,10 @@ class MemoryCoordinator:
         )
         self.long.reinforce(summary_packet)
         self.archive.store([summary_packet])
+ codex/resolve-conflict-in-readme.md-74x7dq
 =======
+=======
+ main
  main
 
         event_prompt = (
@@ -178,6 +206,11 @@ class MemoryCoordinator:
         except Exception:
             event_data = None
         if event_data:
+ codex/resolve-conflict-in-readme.md-74x7dq
+            if "title" in event_data:
+                event_data["title"] = self.filter.filter_text(str(event_data["title"]))
+=======
+ main
             self._schedule_event(event_data, daily_summary)
 
         for p in packets:
@@ -186,7 +219,11 @@ class MemoryCoordinator:
             self.archive.store([p])
 
     def _schedule_event(self, event: Dict[str, Any], daily_summary: str) -> None:
+ codex/resolve-conflict-in-readme.md-74x7dq
+        title = self.filter.filter_text(event.get("title", "Untitled event"))
+=======
         title = event.get("title", "Untitled event")
+ main
         date = event.get("date", datetime.utcnow().strftime("%Y-%m-%d"))
         time_str = event.get("time", "00:00")
         self.calendar.add_event("user", date, time_str, time_str, title, daily_summary)
@@ -196,7 +233,11 @@ class MemoryCoordinator:
         except Exception:
             dt = datetime.utcnow()
         reminder_dt = dt - timedelta(days=3)
+ codex/resolve-conflict-in-readme.md-74x7dq
+        reminder_text = self.filter.filter_text(
+=======
         reminder_text = (
+ main
             f"Proactive Reminder: Talk to Handler about upcoming event: {title}"
         )
         packet = MemoryPacket.create(
@@ -208,6 +249,8 @@ class MemoryCoordinator:
         )
         self.mid.add(packet, packet.expiry)
 
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
  codex/resolve-conflict-in-readme.md-g7qctv
 =======
     def initiate_dream_cycle(self) -> None:
@@ -244,15 +287,23 @@ class MemoryCoordinator:
         except Exception:
             return "Error recalling dream."
  main
+ main
 
     def purge_archive(self, age_threshold_days: int, salience_threshold: float) -> None:
         """Manually trigger purge of the archive store."""
         self.archive.purge_old_memories(age_threshold_days, salience_threshold)
+codex/resolve-conflict-in-readme.md-74x7dq
+
+    def recall_last_dream(self) -> Optional[str]:
+        return self.dream.recall_last_dream()
+
+=======
  codex/resolve-conflict-in-readme.md-g7qctv
     def recall_last_dream(self) -> Optional[str]:
         return self.dream.recall_last_dream()
 
 =======
+ main
  main
     def check_proactive_events(self) -> Dict[str, List[str]]:
         """Return due reminders and follow-up questions."""
@@ -260,7 +311,11 @@ class MemoryCoordinator:
         expired = self.mid.sweep()
         for p in expired:
             if p.text.startswith("Proactive Reminder"):
+ codex/resolve-conflict-in-readme.md-74x7dq
+                reminders.append(self.filter.filter_text(p.text))
+=======
                 reminders.append(p.text)
+ main
 
         followups: List[str] = []
         yesterday = (datetime.utcnow() - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -285,9 +340,19 @@ class MemoryCoordinator:
             )
             question = self.curiosity.maybe_ask(ctx)
             if question:
+ codex/resolve-conflict-in-readme.md-74x7dq
+                followups.append(self.filter.filter_text(question))
+            else:
+                followups.append(
+                    self.filter.filter_text(
+                        f"How did {e.get('title', 'that event')} go yesterday?"
+                    )
+                )
+=======
                 followups.append(question)
             else:
                 followups.append(f"How did {e.get('title', 'that event')} go yesterday?")
+ main
 
         return {"reminders": reminders, "followups": followups}
 

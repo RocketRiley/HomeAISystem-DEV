@@ -146,6 +146,8 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
  codex/resolve-conflict-in-readme.md-g7qctv
 =======
  codex/resolve-conflict-in-readme.md-esoix8
@@ -218,6 +220,7 @@ MonoBehaviour:
   animator: {fileID: 1002}
 
 
+ main
  main
  main
 --- !u!104 &7
@@ -335,12 +338,15 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
  codex/resolve-conflict-in-readme.md-g7qctv
 =======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
 
 main
+ main
  main
 --- !u!1 &100
 GameObject:
@@ -385,10 +391,13 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier:
   points: []
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
  codex/resolve-conflict-in-readme.md-g7qctv
 =======
  codex/resolve-conflict-in-readme.md-esoix8
 =======
 
+ main
  main
  main

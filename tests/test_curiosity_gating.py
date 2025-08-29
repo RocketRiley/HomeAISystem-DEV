@@ -1,4 +1,11 @@
 import time
+ codex/resolve-conflict-in-readme.md-74x7dq
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+=======
+ main
 from scripts.curiosity_engine import CuriosityEngine, CuriosityContext, EmotionState, MemoryPeek
 
 
@@ -27,6 +34,10 @@ def _base_ctx(**kwargs):
 
 def test_curiosity_suppressed_by_gravity():
     engine = CuriosityEngine()
+ codex/resolve-conflict-in-readme.md-74x7dq
+    engine._rng.seed(0)
+=======
+ main
     effects = {"bundle": {"curiosity": 0.8}, "stance": {"gravity": 0.6}, "curiosity": {"suppress_if": True}}
     ctx = _base_ctx(emotion_effects=effects)
     assert engine.maybe_ask(ctx) is None
@@ -34,6 +45,11 @@ def test_curiosity_suppressed_by_gravity():
 
 def test_curiosity_allows_question():
     engine = CuriosityEngine()
+ codex/resolve-conflict-in-readme.md-74x7dq
+    engine._rng.seed(0)
+    engine._rng.random = lambda: 0.0
+=======
+ main
     effects = {"bundle": {"curiosity": 0.8}, "stance": {"gravity": 0.2}}
     ctx = _base_ctx(emotion_effects=effects)
     assert engine.maybe_ask(ctx) is not None

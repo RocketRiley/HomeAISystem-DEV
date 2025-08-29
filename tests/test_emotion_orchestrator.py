@@ -1,9 +1,12 @@
 import json
 from pathlib import Path
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(ROOT))
+ main
 
 from emotion.orchestrator import EmotionOrchestrator, PAD
 
@@ -19,6 +22,8 @@ def test_prosody_mapping(tmp_path):
     assert abs(prosody["rate"] + 0.07) < 1e-6
     assert abs(prosody["pitch"] + 0.035) < 1e-6
     assert abs(prosody["pause_ms"] - 84.0) < 1e-6
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
 
 def test_stance_clamps_extreme_pad_values():
     ebo = EmotionOrchestrator()
@@ -29,3 +34,4 @@ def test_stance_clamps_extreme_pad_values():
     pad_high = PAD(pleasure=-2.0, arousal=2.0, dominance=-5.0)
     stance_high = ebo.stance({}, pad_high, None, None)
     assert stance_high["enthusiasm"] == 1.0
+ main

@@ -7,10 +7,9 @@ New-Item -ItemType Directory -Force -Path ".\vrm" | Out-Null
 New-Item -ItemType Directory -Force -Path ".\voice" | Out-Null
 New-Item -ItemType Directory -Force -Path ".\wakewords" | Out-Null
 
-# === EDIT THESE URLS ===
-# Example GGUF (placeholder; replace with your actual link)
-$ggufUrl = "https://YOUR-DOWNLOAD-URL/capybarahermes-2.5-mistral-7b.Q6_K.gguf"
-$ggufOut = ".\LLM-BASE\capybarahermes-2.5-mistral-7b.Q6_K.gguf"
+# Fetch a small open-source LLM model
+$ggufUrl = "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
+$ggufOut = ".\LLM-BASE\mistral-7b-instruct-v0.2.Q4_K_M.gguf"
 
 if (-not (Test-Path $ggufOut)) {
   Write-Host "Downloading LLM model..." -ForegroundColor Cyan

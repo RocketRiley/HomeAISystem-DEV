@@ -18,6 +18,11 @@ def test_run_nightly_writes_journal(tmp_path, monkeypatch):
             "max_tokens": 50,
             "store_full": True,
             "share_morning_one_liner": True,
+ codex/resolve-conflict-in-readme.md-74x7dq
+            "sleep_hours": 0.0005,
+            "check_interval_minutes": 0.0001,
+=======
+ main
         }
     }
     cfg_path = tmp_path / "cfg.json"
@@ -38,7 +43,18 @@ def test_run_nightly_writes_journal(tmp_path, monkeypatch):
         return "A sunny field of code and friends."  # short
 
     monkeypatch.setattr(dreaming, "generate_response", fake_generate)
+ codex/resolve-conflict-in-readme.md-74x7dq
+    wake_calls = {"count": 0}
+
+    def wake_check():
+        wake_calls["count"] += 1
+        return wake_calls["count"] > 1
+
+    monkeypatch.setattr(dreaming.time, "sleep", lambda s: None)
+    dm = dreaming.DreamManager(lambda: dreaming.Mood(valence=-0.5), wake_check=wake_check)
+=======
     dm = dreaming.DreamManager(lambda: dreaming.Mood(valence=-0.5))
+ main
     result = dm.run_nightly(None)
     assert result["ran"] is True
     assert log_path.exists()
@@ -49,3 +65,7 @@ def test_run_nightly_writes_journal(tmp_path, monkeypatch):
     after = result["mood_after"]["valence"]
     assert after > before
     assert "plan" in result
+ codex/resolve-conflict-in-readme.md-74x7dq
+    assert wake_calls["count"] >= 1
+=======
+ main

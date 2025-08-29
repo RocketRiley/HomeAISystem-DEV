@@ -43,10 +43,13 @@ listening state.
 import os
 import threading
 import time
+import json
 from pathlib import Path
 from typing import Optional
 
 from osc_bridge_stub import send_mouth_open, send_pad
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
  codex/resolve-conflict-in-readme.md-g7qctv
 =======
  codex/resolve-conflict-in-readme.md-esoix8
@@ -56,6 +59,7 @@ from osc_bridge_stub import send_mouth_open, send_pad
  codex/resolve-conflict-in-readme.md-ookl8l
 =======
 from log_rotation import rotate_logs_periodically
+ main
  main
  main
  main
@@ -77,6 +81,11 @@ try:
     from faster_whisper import WhisperModel  # type: ignore
 except Exception:
     WhisperModel = None
+
+try:
+    from vosk import Model as VoskModel, KaldiRecognizer  # type: ignore
+except Exception:
+    VoskModel = KaldiRecognizer = None  # type: ignore
 
 try:
     from openWakeWord import WakeWordEngine  # type: ignore
@@ -131,8 +140,31 @@ class DummySTT:
 
 
 class VoskSTT(DummySTT):
+ codex/resolve-conflict-in-readme.md-74x7dq
+    """Offline recogniser using the Vosk library."""
+
+    def __init__(self, model_path: Optional[str] = None) -> None:
+        if VoskModel is None or KaldiRecognizer is None or sd is None:
+            raise RuntimeError("vosk or sounddevice not available")
+        model_dir = model_path or os.getenv("VOSK_MODEL_PATH", "voice/vosk-model-small-en-us-0.15")
+        self.model = VoskModel(model_dir)
+
+    def listen(self) -> str:
+        samplerate = 16000
+        duration = float(os.getenv("STT_WINDOW", "5"))
+        recording = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=1)
+        sd.wait()
+        rec = KaldiRecognizer(self.model, samplerate)
+        rec.AcceptWaveform(recording.tobytes())
+        try:
+            result = json.loads(rec.Result())
+            return result.get("text", "").strip()
+        except Exception:
+            return ""
+=======
     """Placeholder for a Vosk-based recogniser."""
     pass
+ main
 
 
 class ServerSTT(DummySTT):
@@ -265,6 +297,11 @@ def main() -> None:
     stt = select_stt()
     tts = select_tts()
 
+ codex/resolve-conflict-in-readme.md-74x7dq
+    # Optional smart home helpers
+    bridge = SmartHomeBridge() if SmartHomeBridge else None
+    parser = SmartHomeCommandParser() if SmartHomeCommandParser else None
+=======
  codex/resolve-conflict-in-readme.md-g7qctv
     # Optional smart home helpers
     bridge = SmartHomeBridge() if SmartHomeBridge else None
@@ -295,6 +332,7 @@ codex/resolve-conflict-in-readme.md-ookl8l
  main
  main
 main
+ main
  main
     print("Voice loop ready. Say the wake word to begin.")
     # Start wake word detection

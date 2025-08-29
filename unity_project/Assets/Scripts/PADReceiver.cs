@@ -55,6 +55,11 @@ public class PADReceiver : MonoBehaviour
         animator?.SetFloat("MouthOpen", v);
     }
 
+    void OnMouthOpen(string address, OscDataHandle data)
+    {
+        animator?.SetFloat("MouthOpen", data.GetElementAsFloat(0));
+    }
+
     void OnDestroy()
     {
         server?.Dispose();
