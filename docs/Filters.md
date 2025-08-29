@@ -12,6 +12,7 @@ Clair ships with a word-replacement filter pipeline.
 
 The replacement tables for each level live in `scripts/filter_system.py`.
 
+ codex/add-sentiment-model-and-documentation
 ## Optional sentiment model
 
 Deployments that cannot query a full LLM may enable a tiny sentiment
@@ -24,3 +25,11 @@ orchestrator uses for pleasure (valence) adjustments.
 The model is distributed under the MIT license.  Verify that any use of
 this optional component complies with its license and with North
 American content regulations.
+=======
+## Conversational Tone Limits
+
+During dialogue the emotion orchestrator clamps valence, arousal and
+dominance to ±0.6.  Downstream speech and animation systems reference the
+clamped values so Clair's vocal delivery and facial expressions remain
+within everyday intensity.
+ main
