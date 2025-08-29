@@ -43,11 +43,17 @@ class DreamManager:
         self,
         mood_getter: Optional[Callable[[], Mood]] = None,
         emotion_state: Optional[EmotionState] = None,
+ codex/resolve-conflict-in-readme.md-74x7dq
         wake_check: Optional[Callable[[], bool]] = None,
     ) -> None:
         self.mood_getter = mood_getter or (lambda: Mood())
         self.emotion_state = emotion_state
         self.wake_check = wake_check or (lambda: False)
+=======
+    ) -> None:
+        self.mood_getter = mood_getter or (lambda: Mood())
+        self.emotion_state = emotion_state
+ main
         self.log = LogManager(LOG_PATH)
         cfg = _load_config().get("dreams", {})
         self.enabled = cfg.get("enabled", True)
@@ -55,8 +61,11 @@ class DreamManager:
         self.max_tokens = cfg.get("max_tokens", 1500)
         self.store_full = cfg.get("store_full", False)
         self.share_one_liner = cfg.get("share_morning_one_liner", True)
+ codex/resolve-conflict-in-readme.md-74x7dq
         self.sleep_hours = cfg.get("sleep_hours", 8)
         self.check_interval = cfg.get("check_interval_minutes", 10) * 60
+=======
+ main
         self.filter = FilterPipeline(os.getenv("FILTER_LEVEL", "enabled"))
 
     def run_nightly(self, daily_summary: Optional[str] = None) -> Dict[str, any]:
@@ -115,6 +124,7 @@ class DreamManager:
         }
         if plan:
             result["plan"] = plan
+ codex/resolve-conflict-in-readme.md-74x7dq
         self._sleep_until_wake()
         return result
 
@@ -125,6 +135,10 @@ class DreamManager:
                 break
             time.sleep(self.check_interval)
 
+=======
+        return result
+
+ main
     def recall_last_dream(self, hours: int = 12) -> Optional[str]:
         if not LOG_PATH.exists():
             return None

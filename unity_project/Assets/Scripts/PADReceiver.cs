@@ -27,22 +27,32 @@ public class PADReceiver : MonoBehaviour
 
     void OnJoy(string address, OscDataHandle data)
     {
-        animator?.SetFloat("Joy", data.GetElementAsFloat(0));
+        float v = Mathf.Clamp(data.GetElementAsFloat(0), -0.6f, 0.6f);
+        animator?.SetFloat("Joy", v);
     }
 
     void OnAngry(string address, OscDataHandle data)
     {
-        animator?.SetFloat("Angry", data.GetElementAsFloat(0));
+        float v = Mathf.Clamp(data.GetElementAsFloat(0), -0.6f, 0.6f);
+        animator?.SetFloat("Angry", v);
     }
 
     void OnSorrow(string address, OscDataHandle data)
     {
-        animator?.SetFloat("Sorrow", data.GetElementAsFloat(0));
+        float v = Mathf.Clamp(data.GetElementAsFloat(0), -0.6f, 0.6f);
+        animator?.SetFloat("Sorrow", v);
     }
 
     void OnFun(string address, OscDataHandle data)
     {
-        animator?.SetFloat("Fun", data.GetElementAsFloat(0));
+        float v = Mathf.Clamp(data.GetElementAsFloat(0), -0.6f, 0.6f);
+        animator?.SetFloat("Fun", v);
+    }
+
+    void OnMouthOpen(string address, OscDataHandle data)
+    {
+        float v = Mathf.Clamp(data.GetElementAsFloat(0), -0.6f, 0.6f);
+        animator?.SetFloat("MouthOpen", v);
     }
 
     void OnMouthOpen(string address, OscDataHandle data)

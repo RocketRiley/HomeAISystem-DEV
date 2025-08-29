@@ -7,10 +7,12 @@ This folder is a starter Unity project for hosting the Clair avatar.
 2. Install the **UniVRM** package to import `.vrm` models.
 3. Drag your VRM file into `Assets/` and open `Assets/Scenes/Main.unity`.
 4. Install the [OscJack](https://github.com/keijiro/OscJack) package.
-5. In the Hierarchy, select the avatar root, click **Add Component**, and choose
-   `PADReceiver` (found in `Assets/Scripts/`). Assign the avatar's `Animator`
-   to the component.
-6. The Python app sends PAD values over OSC on port **9000**; with VSeeFace
+5. Install Unity's **Animation Rigging** package (included in `Packages/manifest.json`).
+6. In the Hierarchy, select the avatar root, click **Add Component**, and add
+   `PADReceiver` and `IKRigController` (found in `Assets/Scripts/`). Assign the
+   avatar's `Animator` and the IK targets/hints to the component. Toggle IK via
+   the `enableIK` field or call `SetIKActive` from scripts or Animator layers.
+7. The Python app sends PAD values over OSC on port **9000**; with VSeeFace
    running, press Play and the avatar should mirror Clair's emotions.
 
 ## Notes

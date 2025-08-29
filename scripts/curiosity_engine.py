@@ -5,8 +5,16 @@ import time
 import re
 import random
 
+ codex/resolve-conflict-in-readme.md-74x7dq
 from scripts.filter_system import FilterPipeline
 
+=======
+ codex/resolve-conflict-in-readme.md-g7qctv
+from scripts.filter_system import FilterPipeline
+
+=======
+ main
+ main
 # ---------- Public config knobs ----------
 DEFAULT_COOLDOWN_SEC = 75            # minimum time between curiosity prompts
 MAX_PER_SESSION      = 6             # absolute cap per app run
@@ -46,7 +54,14 @@ class EmotionState:
     arousal: float
     dominance: float
     top_labels: List[str]
+ codex/resolve-conflict-in-readme.md-74x7dq
     volatility: float = 0.0
+=======
+ codex/resolve-conflict-in-readme.md-g7qctv
+    volatility: float = 0.0
+=======
+ main
+ main
 
 @dataclass
 class CuriosityContext:
@@ -65,7 +80,14 @@ class CuriosityContext:
     safety_filter_level: str
     user_led_adult_topic: bool
     active_goal: Optional[str]
+ codex/resolve-conflict-in-readme.md-74x7dq
     emotion_effects: Optional[Dict[str, Any]] = None
+=======
+ codex/resolve-conflict-in-readme.md-g7qctv
+    emotion_effects: Optional[Dict[str, Any]] = None
+=======
+ main
+ main
 
 
 class CuriosityEngine:
@@ -90,6 +112,10 @@ class CuriosityEngine:
         if not self._topics_allowed(ctx, topics_seen):
             return None
 
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
+ codex/resolve-conflict-in-readme.md-g7qctv
+ main
         if ctx.emotion.volatility > 0.15:
             return None
 
@@ -104,17 +130,32 @@ class CuriosityEngine:
             if ctx.emotion_effects.get("curiosity", {}).get("suppress_if") and gravity > 0.5:
                 return None
 
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
+=======
+ main
+ main
         score = self._score_interest(ctx, topics_seen)
         if self._rng.random() > score:
             return None
 
         question = self._craft_question(ctx, topics_seen)
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
+ codex/resolve-conflict-in-readme.md-g7qctv
+ main
         if not question:
             return None
         filtered = FilterPipeline(ctx.safety_filter_level).filter_text(question)
         if not filtered.strip():
             return None
         return filtered.strip()
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
+=======
+        return question.strip() if question else None
+ main
+ main
 
     # ---------- Signal mixing ----------
     def _score_interest(self, ctx: CuriosityContext, topics_seen: List[str]) -> float:
@@ -168,7 +209,15 @@ class CuriosityEngine:
         if ctx.mode == "adult":
             if ctx.user_led_adult_topic:
                 return True
+ codex/resolve-conflict-in-readme.md-74x7dq
             return not topics
+=======
+ codex/resolve-conflict-in-readme.md-g7qctv
+            return not topics
+=======
+            return True
+main
+ main
         return True
 
     # ---------- Question generation ----------

@@ -11,3 +11,13 @@ Clair ships with a word-replacement filter pipeline.
 - **dev0** – filter disabled for local testing.
 
 The replacement tables for each level live in `scripts/filter_system.py`.
+ codex/resolve-conflict-in-readme.md-74x7dq
+=======
+
+## Conversational Tone Limits
+
+During dialogue the emotion orchestrator clamps valence, arousal and
+dominance to ±0.6.  Downstream speech and animation systems reference the
+clamped values so Clair's vocal delivery and facial expressions remain
+within everyday intensity.
+ main

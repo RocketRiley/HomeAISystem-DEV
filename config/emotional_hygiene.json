@@ -4,9 +4,13 @@
     "max_minutes": 6,
     "max_tokens": 1500,
     "store_full": false,
+ codex/resolve-conflict-in-readme.md-74x7dq
     "share_morning_one_liner": true,
     "sleep_hours": 8,
     "check_interval_minutes": 10
+=======
+    "share_morning_one_liner": true
+ main
   },
   "hygiene": {
     "user": {"offer_min_interval_minutes": 60},
