@@ -128,5 +128,19 @@ class EmotionOrchestrator:
                 result[domain] = domain_effect
         return result
 
+    # ------------------------------------------------------------------
+    # Sentiment integration
+    # ------------------------------------------------------------------
+    def apply_sentiment(self, pad: PAD, positive: float, negative: float) -> PAD:
+        """Return a new :class:`PAD` adjusted by sentiment scores.
+
+        ``positive`` and ``negative`` should be probabilities between ``0`` and
+        ``1``.  The net valence (``positive`` minus ``negative``) is added to
+        the existing pleasure value and clipped to the ``[-1, 1]`` range.
+        """
+
+        valence = max(-1.0, min(1.0, pad.pleasure + positive - negative))
+        return PAD(valence, pad.arousal, pad.dominance)
+
 
 __all__ = ["EmotionOrchestrator", "PAD"]

@@ -8,6 +8,7 @@
 python-osc>=1.7.4
 websockets>=10.4
 python-dotenv>=0.21.0
+
 # Optional sensory and voice frameworks
 opencv-python>=4.8.0
 sounddevice>=0.4.5
@@ -16,28 +17,18 @@ faster-whisper>=0.8.0
 piper-tts>=0.3.0
 openwakeword>=0.7.0
 paho-mqtt>=1.6.1
+
 # Open‑source LLM support (requires a local .gguf model)
 llama-cpp-python>=0.2.0
 openai>=1.0.0  # required only for online mode; safe to omit if running offline
+
 # Experimental learning framework
 dspy>=3.0.2
-codex/resolve-conflict-in-readme.md-g7qctv
+
+# Optional fallback sentiment model
+torch>=2.0.0
+transformers>=4.36.0
+
 # Build utility for creating standalone installer
 pyinstaller>=6.0
-=======
-codex/resolve-conflict-in-readme.md-esoix8
-# Build utility for creating standalone installer
-pyinstaller>=6.0
-=======
- codex/resolve-conflict-in-readme.md-154yk5
-# Build utility for creating standalone installer
-pyinstaller>=6.0
-=======
- codex/resolve-conflict-in-readme.md-ookl8l
-# Build utility for creating standalone installer
-pyinstaller>=6.0
-=======
- main
- main
- main
- main
+
