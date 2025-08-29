@@ -86,6 +86,13 @@ python -m scripts.dspy_learning
 
 Set `DSPY_MODEL` in your `.env` to pick the language model backend.
 
+### Life lessons
+
+Clair distils experiences into high‑confidence "life lessons" stored as
+opinions.  Lessons evolve with new evidence but never override the
+content filter.  See [docs/LifeLessons.md](docs/LifeLessons.md) for
+details.
+
 ### Unity VRM setup
 
 A starter Unity project lives in `unity_project/` with scripts for
