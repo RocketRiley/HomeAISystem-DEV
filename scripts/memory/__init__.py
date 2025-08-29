@@ -22,6 +22,7 @@ from ..curiosity_engine import (
     MemoryPeek,
 )
 from brain.dreaming import DreamManager
+from ..filter_system import FilterPipeline
 
 # Logs directory for dream cycles
 LOG_DIR = Path(__file__).resolve().parent.parent.parent / "logs"
@@ -50,6 +51,7 @@ class MemoryCoordinator:
         self.archive = ArchiveMemory(CONFIG_DIR / "archive" / f"{user_id}.jsonl.gz")
         self.calendar = PersonalCalendar(CONFIG_DIR)
         self.curiosity = CuriosityEngine()
+        self.filter = FilterPipeline(os.getenv("FILTER_LEVEL", "enabled"))
         self._last_daily_summary: Optional[str] = None
         self.dream = DreamManager()
 
@@ -137,6 +139,7 @@ class MemoryCoordinator:
             "following daily log. Be concise.\n\n" + text_block
         )
         daily_summary = generate_response(prompt, history=None, human_mode=False) or ""
+        daily_summary = self.filter.filter_text(daily_summary)
         self._last_daily_summary = daily_summary
         summary_packet = MemoryPacket.create(
             f"Daily summary {date}: {daily_summary}",
@@ -161,6 +164,8 @@ class MemoryCoordinator:
         except Exception:
             event_data = None
         if event_data:
+            if "title" in event_data:
+                event_data["title"] = self.filter.filter_text(str(event_data["title"]))
             self._schedule_event(event_data, daily_summary)
 
         for p in packets:
@@ -169,7 +174,7 @@ class MemoryCoordinator:
             self.archive.store([p])
 
     def _schedule_event(self, event: Dict[str, Any], daily_summary: str) -> None:
-        title = event.get("title", "Untitled event")
+        title = self.filter.filter_text(event.get("title", "Untitled event"))
         date = event.get("date", datetime.utcnow().strftime("%Y-%m-%d"))
         time_str = event.get("time", "00:00")
         self.calendar.add_event("user", date, time_str, time_str, title, daily_summary)
@@ -179,7 +184,7 @@ class MemoryCoordinator:
         except Exception:
             dt = datetime.utcnow()
         reminder_dt = dt - timedelta(days=3)
-        reminder_text = (
+        reminder_text = self.filter.filter_text(
             f"Proactive Reminder: Talk to Handler about upcoming event: {title}"
         )
         packet = MemoryPacket.create(
@@ -205,7 +210,7 @@ class MemoryCoordinator:
         expired = self.mid.sweep()
         for p in expired:
             if p.text.startswith("Proactive Reminder"):
-                reminders.append(p.text)
+                reminders.append(self.filter.filter_text(p.text))
 
         followups: List[str] = []
         yesterday = (datetime.utcnow() - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -230,9 +235,13 @@ class MemoryCoordinator:
             )
             question = self.curiosity.maybe_ask(ctx)
             if question:
-                followups.append(question)
+                followups.append(self.filter.filter_text(question))
             else:
-                followups.append(f"How did {e.get('title', 'that event')} go yesterday?")
+                followups.append(
+                    self.filter.filter_text(
+                        f"How did {e.get('title', 'that event')} go yesterday?"
+                    )
+                )
 
         return {"reminders": reminders, "followups": followups}
 

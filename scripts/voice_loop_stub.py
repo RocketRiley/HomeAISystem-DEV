@@ -43,6 +43,7 @@ listening state.
 import os
 import threading
 import time
+import json
 from pathlib import Path
 from typing import Optional
 
@@ -64,6 +65,11 @@ try:
     from faster_whisper import WhisperModel  # type: ignore
 except Exception:
     WhisperModel = None
+
+try:
+    from vosk import Model as VoskModel, KaldiRecognizer  # type: ignore
+except Exception:
+    VoskModel = KaldiRecognizer = None  # type: ignore
 
 try:
     from openWakeWord import WakeWordEngine  # type: ignore
@@ -118,8 +124,26 @@ class DummySTT:
 
 
 class VoskSTT(DummySTT):
-    """Placeholder for a Vosk-based recogniser."""
-    pass
+    """Offline recogniser using the Vosk library."""
+
+    def __init__(self, model_path: Optional[str] = None) -> None:
+        if VoskModel is None or KaldiRecognizer is None or sd is None:
+            raise RuntimeError("vosk or sounddevice not available")
+        model_dir = model_path or os.getenv("VOSK_MODEL_PATH", "voice/vosk-model-small-en-us-0.15")
+        self.model = VoskModel(model_dir)
+
+    def listen(self) -> str:
+        samplerate = 16000
+        duration = float(os.getenv("STT_WINDOW", "5"))
+        recording = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=1)
+        sd.wait()
+        rec = KaldiRecognizer(self.model, samplerate)
+        rec.AcceptWaveform(recording.tobytes())
+        try:
+            result = json.loads(rec.Result())
+            return result.get("text", "").strip()
+        except Exception:
+            return ""
 
 
 class ServerSTT(DummySTT):
