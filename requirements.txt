@@ -19,6 +19,9 @@ paho-mqtt>=1.6.1
 # Open‑source LLM support (requires a local .gguf model)
 llama-cpp-python>=0.2.0
 openai>=1.0.0  # required only for online mode; safe to omit if running offline
+# Optional sentiment analysis fallback
+transformers>=4.37.0
+torch>=2.0.0
 # Experimental learning framework
 dspy>=3.0.2
  codex/resolve-conflict-in-readme.md-74x7dq
