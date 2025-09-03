@@ -11,5 +11,9 @@
       "humor": {"tau_hours": 8, "weight": 0.9},
       "minor_slight": {"tau_hours": 4, "weight": 0.8}
     }
+  },
+  "dialogue": {
+    "max_sentences": 3,
+    "avg_words_per_sentence": 15
   }
 }
